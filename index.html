@@ -609,12 +609,29 @@ function updateDashboard(){
   return {totalPct, interScore5, quizScore5, totalScore10};
 }
 
-// ===================== 1. CHUYỂN TAB & ĐỌC THUYẾT MINH =====================
+// ===================== 1. CHUYỂN TAB & ĐỌC THUYẾT MINH (ƯU TIÊN GIỌNG TIẾNG VIỆT) =====================
 function switchTab(idx){
   for(let i=0;i<4;i++){
     document.getElementById('stage-'+i).classList.toggle('hidden', i!==idx);
     document.getElementById('tab-'+i).classList.toggle('active', i===idx);
   }
+}
+
+let cachedViVoice = null;
+function pickVietnameseVoice(){
+  if(!('speechSynthesis' in window)) return null;
+  const voices = window.speechSynthesis.getVoices() || [];
+  if(!voices.length) return cachedViVoice;
+  // Ưu tiên giọng có lang chính xác vi-VN / vi_VN hoặc tên chứa Vietnamese / Tiếng Việt / An / HoaiMy / NamMinh
+  const exactVi = voices.find(v => /^vi([-_]|$)/i.test(v.lang));
+  const namedVi = voices.find(v => /vietnam|tiếng việt|hoaimy|namminh/i.test(v.name));
+  cachedViVoice = exactVi || namedVi || null;
+  return cachedViVoice;
+}
+
+if('speechSynthesis' in window){
+  pickVietnameseVoice();
+  window.speechSynthesis.onvoiceschanged = () => { pickVietnameseVoice(); };
 }
 
 function speakText(text){
@@ -623,10 +640,22 @@ function speakText(text){
     return;
   }
   window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'vi-VN';
-  u.rate = 0.96;
-  window.speechSynthesis.speak(u);
+  const doSpeak = () => {
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'vi-VN';
+    u.rate = 0.96;
+    const viVoice = pickVietnameseVoice();
+    if(viVoice){
+      u.voice = viVoice;
+      u.lang = viVoice.lang || 'vi-VN';
+    }
+    window.speechSynthesis.speak(u);
+  };
+  if((window.speechSynthesis.getVoices() || []).length === 0){
+    setTimeout(doSpeak, 120);
+  } else {
+    doSpeak();
+  }
 }
 
 function handleTtsClick(key, text){
