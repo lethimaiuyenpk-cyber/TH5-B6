@@ -1,0 +1,1356 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bài giảng E-learning Tin học 5 – Bài 6: Định dạng kí tự và bố trí hình ảnh trong văn bản</title>
+<style>
+  :root{
+    --primary:#1d4ed8;
+    --primary-dark:#1e3a8a;
+    --teal:#0f766e;
+    --amber:#d97706;
+    --rose:#e11d48;
+    --green:#16a34a;
+    --purple:#7e22ce;
+    --bg:#f0f6ff;
+    --card:#ffffff;
+    --text:#1e293b;
+    --muted:#64748b;
+    --border:#dbeafe;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+  .container{max-width:1040px;margin:0 auto;padding:18px}
+
+  header.hero{
+    background:linear-gradient(125deg,#1d4ed8 0%,#0284c7 55%,#0f766e 100%);
+    color:#fff;padding:22px 26px;border-radius:18px;box-shadow:0 10px 25px rgba(29,78,216,.18);
+  }
+  header.hero .tag{display:inline-block;background:rgba(255,255,255,.2);padding:4px 12px;border-radius:999px;font-size:13px;font-weight:700;letter-spacing:.3px;margin-bottom:8px}
+  header.hero h1{margin:0 0 6px;font-size:24px;line-height:1.3}
+  header.hero p{margin:0;opacity:.94;font-size:14.5px}
+
+  /* BẢNG THEO DÕI % TƯƠNG TÁC & CHẤM ĐIỂM TOÀN BÀI (STICKY) */
+  .tracker-bar{
+    position:sticky;top:8px;z-index:50;
+    background:rgba(255,255,255,.97);backdrop-filter:blur(6px);
+    border:2px solid #93c5fd;border-radius:16px;padding:12px 16px;margin:14px 0;
+    box-shadow:0 8px 20px rgba(15,23,42,.1);
+  }
+  .tracker-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:8px}
+  .tracker-metrics{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .metric-pill{
+    padding:5px 12px;border-radius:999px;font-size:13.5px;font-weight:800;display:inline-flex;align-items:center;gap:5px;
+  }
+  .m-pct{background:#dbeafe;color:#1e40af}
+  .m-inter{background:#fef3c7;color:#92400e}
+  .m-quiz{background:#f3e8ff;color:#6b21a8}
+  .m-total{background:#dcfce7;color:#15803d;font-size:14.5px}
+  .progress-track{
+    width:100%;height:12px;background:#e2e8f0;border-radius:999px;overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;width:0%;background:linear-gradient(90deg,#2563eb,#0d9488,#16a34a);
+    transition:width .35s ease;border-radius:999px;
+  }
+  .tracker-sub{
+    display:flex;flex-wrap:wrap;gap:12px;font-size:12.5px;color:#475569;margin-top:6px;
+  }
+  .tracker-sub span.done-item{color:#15803d;font-weight:700}
+
+  .nav-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+  @media(max-width:720px){.nav-tabs{grid-template-columns:repeat(2,1fr)}}
+  .tab-btn{
+    border:2px solid #cbd5e1;background:#fff;color:#334155;padding:11px 10px;border-radius:14px;
+    font:inherit;font-weight:700;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;
+  }
+  .tab-btn span.step-num{font-size:12px;text-transform:uppercase;color:var(--primary);background:#eff6ff;padding:2px 9px;border-radius:999px}
+  .tab-btn:hover{border-color:#93c5fd;transform:translateY(-1px)}
+  .tab-btn.active{background:linear-gradient(135deg,#1d4ed8,#0284c7);color:#fff;border-color:#1d4ed8;box-shadow:0 6px 16px rgba(29,78,216,.24)}
+  .tab-btn.active span.step-num{background:rgba(255,255,255,.22);color:#fff}
+
+  .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:0 3px 10px rgba(15,23,42,.04)}
+  .card h2{margin:0 0 12px;font-size:20px;color:var(--primary-dark);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .card h3{margin:14px 0 8px;font-size:17px;color:#0f172a}
+
+  .tts-bar{
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
+    background:#eff6ff;border:1px solid #bfdbfe;padding:10px 14px;border-radius:12px;margin-bottom:14px;
+  }
+  .tts-text{font-size:14.5px;color:#1e3a8a;font-style:italic;flex:1}
+  .btn{
+    border:0;border-radius:10px;padding:10px 16px;font:inherit;font-weight:700;cursor:pointer;
+    background:var(--primary);color:#fff;transition:all .15s;display:inline-flex;align-items:center;gap:6px;
+  }
+  .btn:hover{filter:brightness(1.06)}
+  .btn:disabled{opacity:.55;cursor:not-allowed}
+  .btn-teal{background:var(--teal)}
+  .btn-amber{background:var(--amber)}
+  .btn-rose{background:var(--rose)}
+  .btn-green{background:var(--green)}
+  .btn-purple{background:var(--purple)}
+  .btn-outline{background:#fff;color:var(--primary);border:1.5px solid var(--primary)}
+  .btn-sm{padding:6px 12px;font-size:14px;border-radius:8px}
+
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:760px){.grid-2{grid-template-columns:1fr}}
+
+  /* Hình 28, 29, 30 */
+  .sgk-fig{
+    background:#fff;border:2px solid #cbd5e1;border-radius:14px;padding:14px 16px;box-shadow:0 3px 8px rgba(15,23,42,.04);
+  }
+  .sgk-fig-caption{
+    text-align:center;font-weight:700;font-size:14px;color:#1e3a8a;margin-top:10px;padding-top:8px;border-top:1px dashed #cbd5e1;
+  }
+  .char-card{
+    display:flex;gap:14px;align-items:flex-start;background:#f8fafc;border:1.5px solid #93c5fd;border-radius:14px;padding:14px;
+  }
+  .char-card.minh{border-color:#fcd34d;background:#fffbeb}
+  .char-avatar{flex-shrink:0;text-align:center}
+  .char-bubble{flex:1;background:#fff;border:1px solid #cbd5e1;border-radius:10px;padding:10px 12px;font-size:14.5px}
+  .char-bubble .gopy{margin-top:6px;padding:6px 10px;border-radius:8px;background:#eff6ff;color:#1e3a8a;font-weight:600}
+  .char-card.minh .char-bubble .gopy{background:#fef3c7;color:#92400e}
+
+  /* Bảng yêu cầu SGK */
+  .sgk-req-box{
+    background:#f8fafc;border:1.5px solid #93c5fd;border-radius:12px;padding:14px 16px;margin-bottom:14px;
+  }
+  .sgk-req-title{font-weight:800;color:#1e3a8a;margin-bottom:8px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .req-table{width:100%;border-collapse:collapse;background:#fff;font-size:14.5px}
+  .req-table th,.req-table td{border:1px solid #cbd5e1;padding:8px 10px;text-align:left;vertical-align:top}
+  .req-table th{background:#eff6ff;color:#1e3a8a;font-weight:700}
+
+  /* Word Simulator */
+  .sim-toolbar{
+    background:#f1f5f9;border:1px solid #cbd5e1;border-radius:12px;padding:12px;margin-bottom:12px;
+    display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+  }
+  .sim-group{display:flex;align-items:center;gap:6px;background:#fff;padding:6px 10px;border-radius:9px;border:1px solid #e2e8f0}
+  .sim-group label{font-size:13px;font-weight:700;color:#475569}
+  select,input[type=text]{padding:7px 10px;border:1px solid #94a3b8;border-radius:8px;font:inherit;background:#fff;color:#0f172a}
+  .fmt-toggle{
+    width:34px;height:34px;border:1px solid #cbd5e1;background:#fff;border-radius:7px;cursor:pointer;font-size:15px;
+    display:inline-flex;align-items:center;justify-content:center;
+  }
+  .fmt-toggle.on{background:#dbeafe;border-color:#2563eb;color:#1d4ed8;box-shadow:inset 0 0 0 1px #2563eb}
+  .color-dot{width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #94a3b8;cursor:pointer}
+  .color-dot.active{box-shadow:0 0 0 2.5px #0f172a;transform:scale(1.1)}
+
+  .word-page{
+    background:#fff;border:2px solid #cbd5e1;border-radius:12px;padding:24px 28px;min-height:310px;
+    box-shadow:0 6px 18px rgba(15,23,42,.06);position:relative;overflow:hidden;
+  }
+  .word-doc-wrap{display:block}
+  .word-doc-wrap.layout-square{display:flex;gap:20px;align-items:flex-start;justify-content:space-between}
+  @media(max-width:640px){.word-doc-wrap.layout-square{flex-direction:column}}
+  .word-text-col{flex:1}
+  .word-img-box{
+    border:2px dashed #93c5fd;border-radius:12px;padding:10px;background:#f8fafc;text-align:center;
+    width:185px;margin-top:14px;transition:all .25s;position:relative;
+  }
+  .word-doc-wrap.layout-square .word-img-box{margin-top:4px;flex-shrink:0}
+  .layout-badge{
+    display:inline-block;font-size:11px;font-weight:700;background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:6px;margin-bottom:6px;
+  }
+  .target-pill{
+    padding:6px 12px;border-radius:999px;border:1.5px solid #cbd5e1;background:#fff;cursor:pointer;font-size:13.5px;font-weight:700;
+  }
+  .target-pill.active{background:#1e3a8a;color:#fff;border-color:#1e3a8a}
+
+  .check-sim-result{
+    margin-top:12px;padding:12px 14px;border-radius:10px;font-size:14.5px;border:1px solid #cbd5e1;background:#f8fafc;
+  }
+
+  /* Remember boxes */
+  .memo-box{
+    background:linear-gradient(135deg,#fefce8,#fffbeb);border:2px solid #fde047;border-radius:14px;padding:16px 18px;margin:10px 0;
+  }
+  .memo-box li{margin:8px 0;font-size:16px}
+  .step-list{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px 18px}
+
+  /* Lucky Star Game */
+  .stars-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:14px 0}
+  @media(max-width:600px){.stars-grid{grid-template-columns:repeat(3,1fr)}}
+  .star-btn{
+    background:linear-gradient(145deg,#f59e0b,#d97706);color:#fff;border:0;border-radius:16px;padding:18px 10px;
+    font-size:18px;font-weight:800;cursor:pointer;box-shadow:0 6px 14px rgba(217,119,6,.25);transition:transform .15s;
+  }
+  .star-btn:hover{transform:translateY(-3px)}
+  .star-btn.done{background:#16a34a;box-shadow:none}
+  .candy-bar{background:#fdf2f8;border:1px solid #fbcfe8;color:#9d174d;padding:10px 14px;border-radius:12px;font-weight:700;display:inline-flex;align-items:center;gap:8px}
+
+  /* Practice Quiz */
+  .q-card{background:#fff;border:1px solid #dce5f1;border-radius:14px;padding:18px;margin:14px 0}
+  .q-card.q-correct{border-left:6px solid #16a34a}
+  .q-card.q-wrong{border-left:6px solid #dc2626}
+  .badge{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700;margin-left:6px;vertical-align:middle}
+  .b-nb{background:#dbeafe;color:#1e40af}
+  .b-th{background:#fef3c7;color:#92400e}
+  .b-vd{background:#fce7f3;color:#9d174d}
+  .b-type{background:#e2e8f0;color:#334155}
+  .option{display:block;margin:7px 0;padding:9px 12px;border-radius:9px;border:1px solid #e2e8f0;cursor:pointer;transition:background .15s}
+  .option:hover{background:#eff6ff}
+  .opt-correct{background:#dcfce7 !important;border-color:#86efac !important;color:#14532d;font-weight:700}
+  .opt-wrong{background:#fee2e2 !important;border-color:#fca5a5 !important;color:#7f1d1d;text-decoration:line-through}
+  .tf-row{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;padding:9px 12px;margin:7px 0;border-radius:9px;background:#f8fafc;border:1px solid #e2e8f0}
+  .tf-choices label{margin-left:14px;font-weight:700;cursor:pointer}
+  .match-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:center;padding:9px 12px;margin:7px 0;border-radius:9px;background:#f8fafc;border:1px solid #e2e8f0}
+  @media(max-width:620px){.match-row{grid-template-columns:1fr}}
+  .fill-box{padding:14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;line-height:2.2;margin-top:8px}
+  .word-bank{margin-top:8px;font-size:14px;color:#334155;background:#eff6ff;padding:7px 12px;border-radius:8px;display:inline-block}
+  .explain-box{margin-top:12px;padding:12px 14px;border-radius:10px;font-size:14.5px;line-height:1.55}
+  .explain-box.ok{background:#f0fdf4;border:1px solid #bbf7d0;color:#14532d}
+  .explain-box.bad{background:#fef2f2;border:1px solid #fecaca;color:#7f1d1d}
+  .timer{font-size:22px;font-weight:800;color:var(--teal)}
+  .rank-pill{display:inline-block;padding:5px 14px;border-radius:999px;font-weight:800;font-size:15px}
+  .rank-htt{background:#dcfce7;color:#15803d}
+  .rank-ht{background:#dbeafe;color:#1d4ed8}
+  .rank-cht{background:#fee2e2;color:#b91c1c}
+  .review-item{padding:11px 14px;margin:8px 0;border-radius:10px;border:1px solid #e2e8f0;font-size:15px}
+  .review-item.ok{background:#f0fdf4;border-color:#bbf7d0}
+  .review-item.bad{background:#fef2f2;border-color:#fecaca}
+  .hidden{display:none !important}
+  footer{text-align:center;font-size:13px;color:var(--muted);padding:16px 0}
+</style>
+</head>
+<body>
+<div class="container">
+  <header class="hero">
+    <div class="tag">TIN HỌC LỚP 5 • KẾT NỐI TRI THỨC VỚI CUỘC SỐNG • CHỦ ĐỀ 5</div>
+    <h1>Bài 6: Định dạng kí tự và bố trí hình ảnh trong văn bản</h1>
+    <p>Hệ thống học tập & Đánh giá toàn diện từ lúc tương tác bài giảng đến trắc nghiệm (100% tiến độ & thang điểm 10)</p>
+  </header>
+
+  <!-- THANH ĐÁNH GIÁ % TƯƠNG TÁC & ĐIỂM SỐ LIÊN TỤC -->
+  <div class="tracker-bar" role="region" aria-label="Bảng theo dõi tiến độ và điểm số">
+    <div class="tracker-top">
+      <div style="font-weight:800;color:#1e3a8a;font-size:15px">📊 Tiến độ tương tác & Điểm đánh giá của em:</div>
+      <div class="tracker-metrics">
+        <span class="metric-pill m-pct" id="ui-pct">Tiến độ bài học: 0%</span>
+        <span class="metric-pill m-inter" id="ui-inter-score">Điểm tương tác: 0.0 / 5.0</span>
+        <span class="metric-pill m-quiz" id="ui-quiz-score">Điểm trắc nghiệm: 0.0 / 5.0</span>
+        <span class="metric-pill m-total" id="ui-total-score">🏆 Tổng điểm: 0.0 / 10</span>
+      </div>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="ui-progress-fill"></div>
+    </div>
+    <div class="tracker-sub">
+      <span id="chk-tts">⬜ Nghe thuyết minh (10%)</span>
+      <span id="chk-sim1">⬜ Thực hành Kem cầu vồng (15%)</span>
+      <span id="chk-sim2">⬜ Thực hành Lịch trình (10%)</span>
+      <span id="chk-memo">⬜ Xem & Đọc Ghi nhớ (10%)</span>
+      <span id="chk-stars">⬜ Ngôi sao may mắn: 0/5 (25%)</span>
+      <span id="chk-quiz">⬜ Nộp bài trắc nghiệm 10 câu (30%)</span>
+    </div>
+  </div>
+
+  <!-- KHAI BÁO THÔNG TIN HỌC SINH NGAY ĐẦU BÀI ĐỂ GHI NHẬN TỪ ĐẦU -->
+  <div class="card" style="padding:14px 18px;background:#f8fafc;border-color:#93c5fd">
+    <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between">
+      <div style="font-weight:800;color:#1e3a8a">👩‍🎓 Thông tin học sinh tham gia bài học:</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;flex:1;max-width:620px">
+        <input id="stu-name" type="text" maxlength="100" style="flex:2;min-width:180px" placeholder="Nhập Họ và tên của em...">
+        <input id="stu-class" type="text" maxlength="30" style="flex:1;min-width:110px" placeholder="Lớp (VD: 5.3)">
+      </div>
+    </div>
+  </div>
+
+  <nav class="nav-tabs" aria-label="Các chặng học tập">
+    <button class="tab-btn active" onclick="switchTab(0)" id="tab-0">
+      <span class="step-num">Chặng 1 (35%)</span>
+      <span>🚀 Khởi động & Khám phá</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab(1)" id="tab-1">
+      <span class="step-num">Chặng 2 (10%)</span>
+      <span>💡 Ghi nhớ & Quy trình</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab(2)" id="tab-2">
+      <span class="step-num">Chặng 3 (25%)</span>
+      <span>⭐ Ngôi sao may mắn</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab(3)" id="tab-3">
+      <span class="step-num">Chặng 4 (30%)</span>
+      <span>📝 Trắc nghiệm (10/40 câu)</span>
+    </button>
+  </nav>
+
+  <!-- CHẶNG 1: KHỞI ĐỘNG & KHÁM PHÁ -->
+  <section id="stage-0">
+    <div class="card">
+      <h2>🚀 Hoạt động Khởi động & Khám phá: Hình 28, Hình 29, Hình 30 (SGK trang 29–30)</h2>
+      <div class="tts-bar">
+        <div class="tts-text">"Hình 28 là nội dung hướng dẫn cách làm kem được trình bày bằng phần mềm soạn thảo văn bản. Cùng quan sát Hình 29 nhận xét của bạn An và Hình 30 nhận xét của bạn Minh để biết cách trình bày văn bản đẹp hơn nhé!"</div>
+        <button class="btn btn-sm" onclick="handleTtsClick('tts1','Hình 28 là nội dung hướng dẫn cách làm kem được trình bày bằng phần mềm soạn thảo văn bản. Cùng quan sát Hình 29 nhận xét của bạn An và Hình 30 nhận xét của bạn Minh để biết cách trình bày văn bản đẹp hơn nhé!')">🔊 Nghe thuyết minh (+5%)</button>
+      </div>
+
+      <div class="grid-2" style="align-items:stretch">
+        <!-- HÌNH 28 MINH HỌA VĂN BẢN GỐC -->
+        <div class="sgk-fig">
+          <div style="border:1.5px solid #38bdf8;border-radius:12px;padding:12px 14px;background:#fff;font-family:Verdana,sans-serif;font-size:13.5px;line-height:1.45">
+            <div style="color:#0284c7;font-size:18px;font-weight:800;margin-bottom:4px">Kem cầu vồng hoa quả</div>
+            <div>Nguyên liệu:</div>
+            <div>Xoài, nho xanh, thanh long, dưa hấu, sữa chua.</div>
+            <div>Dụng cụ:</div>
+            <div>1 cốc cao.</div>
+            <div>Hướng dẫn:</div>
+            <div>1. Làm sạch trái cây.</div>
+            <div>2. Nho cắt đôi, các loại hoa quả khác cắt thành miếng vừa ăn.</div>
+            <div>3. Cho sữa chua vào đáy cốc.</div>
+            <div>4. Lần lượt xếp từng loại trái cây vào cốc, bắt đầu với xoài, sau đó là thanh long, dưa hấu và nho.</div>
+            <div>5. Đưa cốc kem vào ngăn đá tủ lạnh.</div>
+            <div style="margin-top:8px">
+              <svg width="68" height="92" viewBox="0 0 120 160" aria-label="Hình cốc kem trong Hình 28">
+                <polygon points="32,25 88,25 74,115 46,115" fill="#f8fafc" stroke="#64748b" stroke-width="3"/>
+                <polygon points="35,28 85,28 82,48 38,48" fill="#ef4444"/>
+                <polygon points="38,48 82,48 79,68 41,68" fill="#7c3aed"/>
+                <polygon points="41,68 79,68 76,88 44,88" fill="#facc15"/>
+                <polygon points="44,88 76,88 73,112 47,112" fill="#fef9c3"/>
+                <rect x="56" y="115" width="8" height="28" fill="#94a3b8"/>
+                <ellipse cx="60" cy="145" rx="24" ry="6" fill="#cbd5e1" stroke="#64748b" stroke-width="2"/>
+              </svg>
+            </div>
+          </div>
+          <div class="sgk-fig-caption">Hình 28. Văn bản hướng dẫn cách làm kem (SGK trang 29)</div>
+        </div>
+
+        <!-- HÌNH 29 VÀ HÌNH 30 MINH HỌA AN VÀ MINH -->
+        <div style="display:flex;flex-direction:column;gap:12px;justify-content:space-between">
+          <div class="sgk-fig">
+            <div class="char-card">
+              <div class="char-avatar">
+                <svg width="74" height="86" viewBox="0 0 90 105" aria-label="Minh họa bạn An">
+                  <circle cx="45" cy="40" r="24" fill="#fde68a"/>
+                  <path d="M21,38 C21,16 69,16 69,38 C63,24 27,24 21,38 Z" fill="#1e293b"/>
+                  <circle cx="18" cy="42" r="7" fill="#1e293b"/>
+                  <circle cx="72" cy="42" r="7" fill="#1e293b"/>
+                  <circle cx="37" cy="40" r="2.8" fill="#0f172a"/>
+                  <circle cx="53" cy="40" r="2.8" fill="#0f172a"/>
+                  <path d="M39,50 Q45,56 51,50" stroke="#e11d48" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                  <path d="M25,68 L65,68 L72,98 L18,98 Z" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5"/>
+                  <polygon points="45,68 38,84 45,78 52,84" fill="#ef4444"/>
+                </svg>
+                <div style="font-weight:800;font-size:13px;color:#1d4ed8">Bạn An</div>
+              </div>
+              <div class="char-bubble">
+                <div>☆ Tên loại kem trình bày rõ ràng.</div>
+                <div>☆ Không có lỗi chính tả.</div>
+                <div class="gopy">💡 Góp ý: Các tiêu đề nổi bật thì văn bản dễ đọc hơn.</div>
+              </div>
+            </div>
+            <div class="sgk-fig-caption">Hình 29. Nhận xét của An (SGK trang 30)</div>
+          </div>
+
+          <div class="sgk-fig">
+            <div class="char-card minh">
+              <div class="char-avatar">
+                <svg width="74" height="86" viewBox="0 0 90 105" aria-label="Minh họa bạn Minh">
+                  <circle cx="45" cy="40" r="24" fill="#fed7aa"/>
+                  <path d="M21,35 C22,14 68,14 69,35 C60,22 30,22 21,35 Z" fill="#0f172a"/>
+                  <circle cx="37" cy="40" r="2.8" fill="#0f172a"/>
+                  <circle cx="53" cy="40" r="2.8" fill="#0f172a"/>
+                  <path d="M38,49 Q45,56 52,49" stroke="#dc2626" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                  <path d="M24,68 L66,68 L73,98 L17,98 Z" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5"/>
+                  <polygon points="45,68 38,84 45,78 52,84" fill="#ef4444"/>
+                </svg>
+                <div style="font-weight:800;font-size:13px;color:#b45309">Bạn Minh</div>
+              </div>
+              <div class="char-bubble">
+                <div>☆ Tên loại kem trình bày đẹp.</div>
+                <div>☆ Hình ảnh cốc kem minh hoạ hấp dẫn.</div>
+                <div class="gopy">💡 Góp ý: Ảnh đặt bên phải chữ thì văn bản đẹp hơn.</div>
+              </div>
+            </div>
+            <div class="sgk-fig-caption">Hình 30. Nhận xét của Minh (SGK trang 30)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHÒNG THỰC HÀNH MÔ PHỎNG VỚI MẪU CHƯA CÓ ẢNH & YÊU CẦU CHUẨN SGK -->
+    <div class="card">
+      <h2>🧪 Thực hành mô phỏng có chấm điểm: Định dạng kí tự & Bố trí hình ảnh theo SGK</h2>
+      <div class="tts-bar">
+        <div class="tts-text">"Em hãy đọc kĩ bảng yêu cầu định dạng của sách giáo khoa, chọn từng phần văn bản để định dạng phông chữ, cỡ chữ, kiểu chữ, màu chữ, sau đó nhấn Chèn ảnh mẫu minh hoạ và chọn Layout Options kiểu Square để đạt đủ 25% tiến độ thực hành nhé!"</div>
+        <button class="btn btn-sm btn-teal" onclick="handleTtsClick('tts2','Em hãy đọc kĩ bảng yêu cầu định dạng của sách giáo khoa, chọn từng phần văn bản để định dạng phông chữ, cỡ chữ, kiểu chữ, màu chữ, sau đó nhấn Chèn ảnh mẫu minh hoạ và chọn Layout Options kiểu Square để đạt đủ 25 phần trăm tiến độ thực hành nhé!')">🔊 Nghe hướng dẫn (+5%)</button>
+      </div>
+
+      <!-- CHỌN BÀI THỰC HÀNH SGK -->
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px">
+        <span style="font-weight:700;font-size:14px">📄 Chọn tệp thực hành trong SGK:</span>
+        <button class="btn btn-sm" id="doc-btn-kem" onclick="loadDocSample('kem')">1. Tệp Cong ThucLamkem (Hình 34 – +15%)</button>
+        <button class="btn btn-sm btn-outline" id="doc-btn-trip" onclick="loadDocSample('trip')">2. Tệp Chuyen Tham Quan (Hình 37 – +10%)</button>
+      </div>
+
+      <!-- HIỂN THỊ YÊU CẦU CHUẨN THEO SÁCH GIÁO KHOA -->
+      <div class="sgk-req-box" id="sgk-requirement-panel"></div>
+
+      <!-- THANH ĐIỀU KHIỂN THAO TÁC CỦA HỌC SINH -->
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px">
+        <span style="font-weight:700;font-size:14px">1️⃣ Chọn vùng văn bản cần định dạng:</span>
+        <button class="target-pill active" id="tgt-title" onclick="setTarget('title')">Tiêu đề chính</button>
+        <button class="target-pill" id="tgt-headings" onclick="setTarget('headings')">Các đầu mục / Mốc thời gian</button>
+        <button class="target-pill" id="tgt-body" onclick="setTarget('body')">Nội dung văn bản</button>
+      </div>
+
+      <div class="sim-toolbar" role="region" aria-label="Thanh công cụ nhóm Font và Layout Options">
+        <div class="sim-group">
+          <label for="sim-font">Phông chữ:</label>
+          <select id="sim-font" onchange="updateStyle('font',this.value)">
+            <option value="Calibri, sans-serif">Calibri</option>
+            <option value="Tahoma, sans-serif">Tahoma</option>
+            <option value="Verdana, sans-serif">Verdana</option>
+            <option value="Arial, sans-serif">Arial</option>
+            <option value="'Times New Roman', serif">Times New Roman</option>
+          </select>
+        </div>
+        <div class="sim-group">
+          <label for="sim-size">Cỡ chữ:</label>
+          <select id="sim-size" onchange="updateStyle('size',this.value)">
+            <option value="14px">11</option>
+            <option value="16px" selected>12</option>
+            <option value="18px">14</option>
+            <option value="20px">15</option>
+            <option value="22px">16</option>
+          </select>
+        </div>
+        <div class="sim-group">
+          <label>Kiểu chữ:</label>
+          <button class="fmt-toggle" id="btn-b" title="In đậm (Bold)" onclick="toggleStyle('bold')"><b>B</b></button>
+          <button class="fmt-toggle" id="btn-i" title="In nghiêng (Italic)" onclick="toggleStyle('italic')"><i>I</i></button>
+          <button class="fmt-toggle" id="btn-u" title="Gạch chân (Underline)" onclick="toggleStyle('underline')"><u>U</u></button>
+        </div>
+        <div class="sim-group">
+          <label>Màu chữ (A):</label>
+          <span class="color-dot active" style="background:#1e293b" title="Đen (Automatic)" onclick="updateStyle('color','#1e293b')"></span>
+          <span class="color-dot" style="background:#0284c7" title="Xanh dương (Blue)" onclick="updateStyle('color','#0284c7')"></span>
+          <span class="color-dot" style="background:#7e22ce" title="Tím (Purple)" onclick="updateStyle('color','#7e22ce')"></span>
+          <span class="color-dot" style="background:#dc2626" title="Đỏ (Red)" onclick="updateStyle('color','#dc2626')"></span>
+          <span class="color-dot" style="background:#15803d" title="Xanh lá (Green)" onclick="updateStyle('color','#15803d')"></span>
+        </div>
+        <div class="sim-group">
+          <label>🖼️ Hình ảnh:</label>
+          <button class="btn btn-sm btn-purple" id="btn-insert-img" onclick="toggleInsertImage()">➕ Chèn ảnh mẫu</button>
+          <button class="btn btn-sm btn-outline hidden" id="btn-layout" onclick="toggleLayout()">Layout Options: In Line with Text</button>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+        <button class="btn btn-sm btn-green" onclick="checkPracticeResult()">✅ Chấm điểm bài thực hành của em</button>
+        <button class="btn btn-sm btn-amber" onclick="resetDocSample()">↺ Làm lại từ văn bản gốc (chưa có ảnh)</button>
+      </div>
+
+      <div id="sim-check-feedback" class="check-sim-result hidden"></div>
+
+      <!-- TRANG SOẠN THẢO WORD MÔ PHỎNG -->
+      <div class="word-page">
+        <div class="word-doc-wrap" id="word-doc-wrap">
+          <div class="word-text-col" id="word-preview-content"></div>
+          <div class="word-img-box hidden" id="word-img-box">
+            <div class="layout-badge" id="layout-badge-text">In Line with Text</div>
+            <div id="word-svg-art"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHẶNG 2: GHI NHỚ & THỰC HÀNH -->
+  <section id="stage-1" class="hidden">
+    <div class="card">
+      <h2>💡 Hộp kiến thức Ghi nhớ (SGK Tin học 5 – Trang 31)</h2>
+      <div class="tts-bar">
+        <div class="tts-text">"Ghi nhớ: Định dạng kí tự (phông chữ, kiểu chữ, cỡ chữ, màu chữ,...) giúp em trình bày văn bản đẹp hơn, dễ đọc và dễ ghi nhớ. Có thể thay đổi cách bố trí hình ảnh trong văn bản để văn bản được trình bày đẹp hơn."</div>
+        <button class="btn btn-sm" onclick="handleMemoDone()">🔊 Nghe & Xác nhận Ghi nhớ (+10%)</button>
+      </div>
+      <div class="memo-box">
+        <ul>
+          <li>📌 <b>Định dạng kí tự</b> (phông chữ, kiểu chữ, cỡ chữ, màu chữ,...) giúp em trình bày văn bản <b>đẹp hơn, dễ đọc và dễ ghi nhớ</b>.</li>
+          <li>🖼️ Có thể <b>thay đổi cách bố trí hình ảnh</b> trong văn bản để văn bản được trình bày đẹp hơn.</li>
+        </ul>
+      </div>
+
+      <h3>🛠️ Tóm tắt quy trình thực hành chuẩn trong Microsoft Word</h3>
+      <div class="grid-2">
+        <div class="step-list">
+          <strong>Nhiệm vụ 1: Định dạng kí tự (nhóm Font – thẻ Home)</strong>
+          <ol>
+            <li><b>Bước 1:</b> Chọn (bôi đen) phần văn bản cần định dạng.</li>
+            <li><b>Bước 2:</b> Dùng các lệnh trong nhóm <b>Font</b>:
+              <ul>
+                <li>Phông chữ (ví dụ: <code>Tahoma</code>, <code>Verdana</code>, <code>Arial</code>).</li>
+                <li>Cỡ chữ (ví dụ: <code>12</code>, <code>15</code>, <code>16</code>).</li>
+                <li>Kiểu chữ: <b>B</b> (đậm), <i>I</i> (nghiêng), <u>U</u> (gạch chân).</li>
+                <li>Màu chữ: nút <b>Font Color (A)</b>.</li>
+              </ul>
+            </li>
+            <li><b>Bước 3:</b> Nháy nút <b>Save</b> để lưu tệp.</li>
+          </ol>
+        </div>
+        <div class="step-list">
+          <strong>Nhiệm vụ 2: Thay đổi cách bố trí hình ảnh</strong>
+          <ol>
+            <li><b>Bước 1:</b> Nháy chuột chọn hình ảnh cần thay đổi vị trí.</li>
+            <li><b>Bước 2:</b> Nháy vào biểu tượng <b>Layout Options</b> xuất hiện bên cạnh hình ảnh.</li>
+            <li><b>Bước 3:</b> Chọn kiểu bố trí hợp lí (ví dụ: <b>Square</b> trong mục <i>With Text Wrapping</i> để văn bản dàn xung quanh ảnh).</li>
+            <li><b>Bước 4:</b> Kéo thả hình ảnh đến vị trí cân đối (ví dụ: bên phải đoạn chữ).</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHẶNG 3: TRÒ CHƠI NGÔI SAO MAY MẮN -->
+  <section id="stage-2" class="hidden">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+        <h2>⭐ Hoạt động Vận dụng – Trò chơi: Ngôi sao may mắn (25% tiến độ)</h2>
+        <div class="candy-bar">🍬 Số kẹo thưởng: <span id="candy-count">0</span> viên • Hoàn thành: <span id="star-done-count">0</span>/5 sao</div>
+      </div>
+      <p>Mỗi ngôi sao trả lời đúng giúp em nhận kẹo thưởng và cộng thêm <b>5% tiến độ tương tác</b> bài học!</p>
+      <div class="stars-grid">
+        <button class="star-btn" id="star-0" onclick="openStar(0)">⭐ Ngôi sao 1<br><small>(+3 kẹo • 5%)</small></button>
+        <button class="star-btn" id="star-1" onclick="openStar(1)">⭐ Ngôi sao 2<br><small>(+2 kẹo • 5%)</small></button>
+        <button class="star-btn" id="star-2" onclick="openStar(2)">⭐ Ngôi sao 3<br><small>(+5 kẹo • 5%)</small></button>
+        <button class="star-btn" id="star-3" onclick="openStar(3)">⭐ Ngôi sao 4<br><small>(+8 kẹo • 5%)</small></button>
+        <button class="star-btn" id="star-4" onclick="openStar(4)">⭐ Ngôi sao 5<br><small>(+10 kẹo • 5%)</small></button>
+      </div>
+      <div id="star-stage" class="card hidden" style="background:#fffbeb;border-color:#fde68a"></div>
+    </div>
+  </section>
+
+  <!-- CHẶNG 4: LUYỆN TẬP & ĐÁNH GIÁ (40 CÂU -> 10 CÂU NGẪU NHIÊN) -->
+  <section id="stage-3" class="hidden">
+    <div class="card">
+      <h2>📝 Luyện tập & Đánh giá trắc nghiệm (30% tiến độ • 5.0 điểm)</h2>
+      <p style="margin-top:0;color:#475569">
+        Ngân hàng gồm <b>40 câu hỏi</b> đầy đủ các mức độ (<i>Nhận biết, Thông hiểu, Vận dụng</i>) và 4 dạng bài (<i>Trắc nghiệm, Đúng/Sai, Nối cột, Điền từ</i>). Mỗi lượt làm bài hệ thống xuất ngẫu nhiên <b>10 câu</b>, chấm điểm chi tiết kèm <b>đáp án giảng giải</b>, cộng hợp với <b>điểm tương tác các chặng 1–3</b> để tính <b>Tổng điểm / 10</b> và gửi về Google Sheets của giáo viên.
+      </p>
+
+      <div id="quiz-setup">
+        <button class="btn" id="btn-start-quiz" onclick="startQuiz()">🚀 Bắt đầu làm bài trắc nghiệm (10 câu ngẫu nhiên)</button>
+      </div>
+
+      <div id="quiz-work" class="hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;background:#f8fafc;padding:12px 16px;border-radius:12px;border:1px solid #e2e8f0;margin-bottom:12px">
+          <div class="timer" id="quiz-timer">⏱️ 08:00</div>
+          <div style="font-size:14px;color:#475569;font-weight:600">Cấu trúc đề: 4 Nhận biết • 3 Thông hiểu • 3 Vận dụng (10 câu)</div>
+        </div>
+        <div id="quiz-questions"></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
+          <button class="btn btn-green" id="btn-submit-quiz" onclick="submitQuiz()">✅ Nộp bài, Xem giảng giải & Gửi điểm tổng hợp</button>
+        </div>
+      </div>
+
+      <div id="quiz-result" class="hidden" style="margin-top:18px"></div>
+    </div>
+  </section>
+
+  <footer>
+    Học liệu điện tử tương tác Tin học 5 (Kết nối tri thức với cuộc sống) – Bài 6: Định dạng kí tự và bố trí hình ảnh trong văn bản • Ghi nhận % tương tác & điểm số về Google Sheets.
+  </footer>
+</div>
+
+<script>
+// ===================== HỆ THỐNG THEO DÕI % TƯƠNG TÁC & CHẤM ĐIỂM TOÀN BÀI =====================
+const progressState = {
+  tts1: false,      // 5%
+  tts2: false,      // 5%
+  simKem: 0,        // tối đa 15% (tỉ lệ theo số tiêu chí đạt 0..4)
+  simTrip: 0,       // tối đa 10% (tỉ lệ theo số tiêu chí đạt 0..3)
+  memo: false,      // 10%
+  stars: [false,false,false,false,false], // 5% mỗi sao = 25%
+  quizDone: false,  // 30% khi nộp bài
+  quizRatio: 0      // tỉ lệ điểm trắc nghiệm 0..1
+};
+
+function updateDashboard(){
+  // 1. Tính % tiến độ tương tác toàn bài (tối đa 100%)
+  const ttsPct   = (progressState.tts1 ? 5 : 0) + (progressState.tts2 ? 5 : 0); // 10%
+  const sim1Pct  = Math.round(progressState.simKem * 15);  // 15%
+  const sim2Pct  = Math.round(progressState.simTrip * 10); // 10%
+  const memoPct  = progressState.memo ? 10 : 0;            // 10%
+  const starCnt  = progressState.stars.filter(Boolean).length;
+  const starPct  = starCnt * 5;                            // 25%
+  const quizPct  = progressState.quizDone ? 30 : 0;        // 30%
+
+  const totalPct = Math.min(100, ttsPct + sim1Pct + sim2Pct + memoPct + starPct + quizPct);
+
+  // 2. Quy đổi điểm:
+  // - Điểm tương tác (Chặng 1-3, tổng 70% tiến độ) -> quy đổi thang 5.0 điểm
+  const interRaw70 = ttsPct + sim1Pct + sim2Pct + memoPct + starPct; // 0..70
+  const interScore5 = Number(((interRaw70 / 70) * 5).toFixed(2));
+
+  // - Điểm trắc nghiệm (Chặng 4, 10 câu) -> quy đổi thang 5.0 điểm (và giữ điểm thang 10 riêng)
+  const quizScore5  = Number((progressState.quizRatio * 5).toFixed(2));
+  const totalScore10 = Number((interScore5 + quizScore5).toFixed(2));
+
+  // Cập nhật giao diện thanh trạng thái
+  document.getElementById('ui-pct').textContent = `Tiến độ bài học: ${totalPct}%`;
+  document.getElementById('ui-inter-score').textContent = `Điểm tương tác: ${interScore5.toFixed(1)} / 5.0`;
+  document.getElementById('ui-quiz-score').textContent = `Điểm trắc nghiệm: ${quizScore5.toFixed(1)} / 5.0`;
+  document.getElementById('ui-total-score').textContent = `🏆 Tổng điểm: ${totalScore10.toFixed(1)} / 10`;
+  document.getElementById('ui-progress-fill').style.width = totalPct + '%';
+
+  // Cập nhật danh sách đầu mục
+  const setChk = (id, done, text) => {
+    const el = document.getElementById(id);
+    el.textContent = (done ? '✅ ' : '⬜ ') + text;
+    el.classList.toggle('done-item', done);
+  };
+  setChk('chk-tts', ttsPct===10, `Nghe thuyết minh (${ttsPct}/10%)`);
+  setChk('chk-sim1', sim1Pct===15, `Thực hành Kem cầu vồng (${sim1Pct}/15%)`);
+  setChk('chk-sim2', sim2Pct===10, `Thực hành Lịch trình (${sim2Pct}/10%)`);
+  setChk('chk-memo', memoPct===10, `Xem & Đọc Ghi nhớ (${memoPct}/10%)`);
+  setChk('chk-stars', starCnt===5, `Ngôi sao may mắn: ${starCnt}/5 (${starPct}/25%)`);
+  setChk('chk-quiz', progressState.quizDone, `Nộp bài trắc nghiệm 10 câu (${quizPct}/30%)`);
+
+  return {totalPct, interScore5, quizScore5, totalScore10};
+}
+
+// ===================== 1. CHUYỂN TAB & ĐỌC THUYẾT MINH =====================
+function switchTab(idx){
+  for(let i=0;i<4;i++){
+    document.getElementById('stage-'+i).classList.toggle('hidden', i!==idx);
+    document.getElementById('tab-'+i).classList.toggle('active', i===idx);
+  }
+}
+
+function speakText(text){
+  if(!('speechSynthesis' in window)){
+    alert('Trình duyệt của em chưa hỗ trợ đọc giọng nói tự động.');
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'vi-VN';
+  u.rate = 0.96;
+  window.speechSynthesis.speak(u);
+}
+
+function handleTtsClick(key, text){
+  speakText(text);
+  progressState[key] = true;
+  updateDashboard();
+}
+
+function handleMemoDone(){
+  speakText('Ghi nhớ: Định dạng kí tự gồm phông chữ, kiểu chữ, cỡ chữ, màu chữ giúp em trình bày văn bản đẹp hơn, dễ đọc và dễ ghi nhớ. Có thể thay đổi cách bố trí hình ảnh trong văn bản để văn bản được trình bày đẹp hơn.');
+  progressState.memo = true;
+  updateDashboard();
+}
+
+// ===================== 2. MÔ PHỎNG ĐỊNH DẠNG VĂN BẢN & CHÈN ẢNH THEO YÊU CẦU SGK =====================
+let currentSample = 'kem';
+let activeTarget = 'title';
+let hasImage = false;
+let isSquareLayout = false;
+
+const defaultStyles = {
+  title:    {font:'Calibri, sans-serif', size:'16px', bold:false, italic:false, underline:false, color:'#1e293b'},
+  headings: {font:'Calibri, sans-serif', size:'16px', bold:false, italic:false, underline:false, color:'#1e293b'},
+  body:     {font:'Calibri, sans-serif', size:'16px', bold:false, italic:false, underline:false, color:'#1e293b'}
+};
+let styles = JSON.parse(JSON.stringify(defaultStyles));
+
+function renderRequirementPanel(){
+  const panel = document.getElementById('sgk-requirement-panel');
+  if(currentSample === 'kem'){
+    panel.innerHTML = `
+      <div class="sgk-req-title">📋 Yêu cầu thực hành theo SGK Tin học 5 – Hình 34 & Nhiệm vụ 2 (Trang 31–32):</div>
+      <table class="req-table">
+        <thead>
+          <tr>
+            <th style="width:28%">Thành phần văn bản</th>
+            <th>Yêu cầu định dạng & bố trí hình ảnh theo SGK</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. Tiêu đề chính</b><br>(<i>Kem cầu vồng hoa quả</i>)</td>
+            <td>Phông chữ <b>Tahoma</b>, cỡ chữ <b>16</b>, màu <b>xanh (Blue)</b>, kiểu chữ <b>đậm (B)</b>.</td>
+          </tr>
+          <tr>
+            <td><b>2. Các đầu mục</b><br>(<i>Nguyên liệu:, Dụng cụ:, Hướng dẫn:</i>)</td>
+            <td>Phông chữ <b>Verdana</b>, cỡ chữ <b>12</b>, màu <b>tím (Purple)</b>, kiểu chữ <b>đậm (B)</b>, <b>nghiêng (I)</b>.</td>
+          </tr>
+          <tr>
+            <td><b>3. Phần nội dung văn bản</b></td>
+            <td>Phông chữ <b>Verdana</b>, cỡ chữ <b>12</b>, màu đen mặc định.</td>
+          </tr>
+          <tr>
+            <td><b>4. Hình ảnh minh hoạ</b><br>(<i>Cốc kem cầu vồng</i>)</td>
+            <td>Nhấn <b>Chèn ảnh mẫu</b>, sau đó chọn <b>Layout Options → Square</b> để đưa ảnh sang <b>bên phải</b> đoạn chữ.</td>
+          </tr>
+        </tbody>
+      </table>
+    `;
+  } else {
+    panel.innerHTML = `
+      <div class="sgk-req-title">📋 Yêu cầu thực hành theo SGK Tin học 5 – Phần Luyện tập (Trang 33):</div>
+      <table class="req-table">
+        <thead>
+          <tr>
+            <th style="width:28%">Thành phần văn bản</th>
+            <th>Yêu cầu định dạng & bố trí hình ảnh theo SGK</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1. Tiêu đề chính</b><br>(<i>Lịch trình chuyến đi tham quan</i>)</td>
+            <td>Phông chữ <b>Arial</b>, cỡ chữ <b>15</b>, kiểu chữ <b>đậm (B)</b>, màu <b>đỏ (Red)</b>.</td>
+          </tr>
+          <tr>
+            <td><b>2. Các mốc thời gian</b><br>(<i>Từ 7h30 – 8h00:, ...</i>)</td>
+            <td>Kiểu chữ <b>đậm (B)</b> và <b>nghiêng (I)</b>, màu <b>xanh (Blue)</b>.</td>
+          </tr>
+          <tr>
+            <td><b>3. Hình ảnh minh hoạ</b></td>
+            <td>Nhấn <b>Chèn ảnh mẫu</b> minh hoạ cho văn bản và chọn <b>Layout Options → Square</b> đặt ảnh hài hoà bên phải chữ.</td>
+          </tr>
+        </tbody>
+      </table>
+    `;
+  }
+}
+
+function renderWordPreview(){
+  const box = document.getElementById('word-preview-content');
+  const art = document.getElementById('word-svg-art');
+  const imgBox = document.getElementById('word-img-box');
+  const wrap = document.getElementById('word-doc-wrap');
+  const insBtn = document.getElementById('btn-insert-img');
+  const layoutBtn = document.getElementById('btn-layout');
+  const layoutBadge = document.getElementById('layout-badge-text');
+
+  imgBox.classList.toggle('hidden', !hasImage);
+  layoutBtn.classList.toggle('hidden', !hasImage);
+  insBtn.textContent = hasImage ? '🗑️ Xoá ảnh mẫu' : '➕ Chèn ảnh mẫu';
+  insBtn.classList.toggle('btn-rose', hasImage);
+  insBtn.classList.toggle('btn-purple', !hasImage);
+
+  wrap.classList.toggle('layout-square', hasImage && isSquareLayout);
+  layoutBtn.textContent = isSquareLayout ? 'Layout Options: Square (Dàn quanh ảnh)' : 'Layout Options: In Line with Text';
+  layoutBtn.classList.toggle('btn-teal', isSquareLayout);
+  layoutBtn.classList.toggle('btn-outline', !isSquareLayout);
+  layoutBadge.textContent = isSquareLayout ? 'With Text Wrapping: Square' : 'In Line with Text';
+
+  const stTitle = `font-family:${styles.title.font};font-size:${styles.title.size};font-weight:${styles.title.bold?'700':'400'};font-style:${styles.title.italic?'italic':'normal'};text-decoration:${styles.title.underline?'underline':'none'};color:${styles.title.color};margin-bottom:10px;`;
+  const stHead  = `font-family:${styles.headings.font};font-size:${styles.headings.size};font-weight:${styles.headings.bold?'700':'400'};font-style:${styles.headings.italic?'italic':'normal'};text-decoration:${styles.headings.underline?'underline':'none'};color:${styles.headings.color};margin:8px 0 3px;`;
+  const stBody  = `font-family:${styles.body.font};font-size:${styles.body.size};font-weight:${styles.body.bold?'700':'400'};font-style:${styles.body.italic?'italic':'normal'};text-decoration:${styles.body.underline?'underline':'none'};color:${styles.body.color};margin:3px 0;`;
+
+  if(currentSample === 'kem'){
+    box.innerHTML = `
+      <div style="${stTitle}">Kem cầu vồng hoa quả</div>
+      <div style="${stHead}">Nguyên liệu:</div>
+      <div style="${stBody}">Xoài, nho xanh, thanh long, dưa hấu, sữa chua.</div>
+      <div style="${stHead}">Dụng cụ:</div>
+      <div style="${stBody}">1 cốc cao.</div>
+      <div style="${stHead}">Hướng dẫn:</div>
+      <div style="${stBody}">1. Làm sạch trái cây.</div>
+      <div style="${stBody}">2. Nho cắt đôi, các loại hoa quả khác cắt thành miếng vừa ăn.</div>
+      <div style="${stBody}">3. Cho sữa chua vào đáy cốc.</div>
+      <div style="${stBody}">4. Lần lượt xếp từng loại trái cây vào cốc, bắt đầu với xoài, sau đó là thanh long, dưa hấu và nho.</div>
+      <div style="${stBody}">5. Đưa cốc kem vào ngăn đá tủ lạnh.</div>
+    `;
+    art.innerHTML = `
+      <svg width="110" height="150" viewBox="0 0 120 160" aria-label="Cốc kem cầu vồng hoa quả">
+        <polygon points="32,25 88,25 74,115 46,115" fill="#f8fafc" stroke="#64748b" stroke-width="3"/>
+        <polygon points="35,28 85,28 82,48 38,48" fill="#ef4444"/>
+        <polygon points="38,48 82,48 79,68 41,68" fill="#7c3aed"/>
+        <polygon points="41,68 79,68 76,88 44,88" fill="#facc15"/>
+        <polygon points="44,88 76,88 73,112 47,112" fill="#fef9c3"/>
+        <rect x="56" y="115" width="8" height="28" fill="#94a3b8"/>
+        <ellipse cx="60" cy="145" rx="24" ry="6" fill="#cbd5e1" stroke="#64748b" stroke-width="2"/>
+      </svg>
+      <div style="font-size:12px;color:#475569;font-weight:600">Cốc kem cầu vồng</div>
+    `;
+  } else {
+    box.innerHTML = `
+      <div style="${stTitle}">Lịch trình chuyến đi tham quan</div>
+      <div style="${stBody}"><span style="${stHead}">Từ 7h30 – 8h00:</span> Tập trung tại sân trường và lên xe khởi hành đến Văn Miếu.</div>
+      <div style="${stBody}"><span style="${stHead}">Từ 8h00 – 9h00:</span> Làm lễ dâng hương và tham quan các công trình tại Văn Miếu.</div>
+      <div style="${stBody}"><span style="${stHead}">Từ 9h00 – 10h30:</span> Đến Viện bảo tàng Phòng không Không quân, học sinh tập trung nghe giới thiệu, thuyết minh sau đó chia theo nhóm tham quan, tìm hiểu về các hiện vật.</div>
+      <div style="${stBody}"><span style="${stHead}">10h30:</span> Tổng kết chương trình, điểm danh quân số và lên xe trở về trường.</div>
+    `;
+    art.innerHTML = `
+      <svg width="130" height="120" viewBox="0 0 140 130" aria-label="Minh hoạ chuyến tham quan">
+        <rect x="10" y="15" width="120" height="95" rx="12" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+        <polygon points="25,52 70,26 115,52" fill="#dc2626"/>
+        <rect x="35" y="52" width="70" height="40" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+        <rect x="60" y="66" width="20" height="26" fill="#92400e"/>
+        <circle cx="105" cy="30" r="8" fill="#facc15"/>
+      </svg>
+      <div style="font-size:12px;color:#475569;font-weight:600">Tham quan Văn Miếu</div>
+    `;
+  }
+  syncToolbarUI();
+}
+
+function syncToolbarUI(){
+  const s = styles[activeTarget];
+  document.getElementById('sim-font').value = s.font;
+  document.getElementById('sim-size').value = s.size;
+  document.getElementById('btn-b').classList.toggle('on', s.bold);
+  document.getElementById('btn-i').classList.toggle('on', s.italic);
+  document.getElementById('btn-u').classList.toggle('on', s.underline);
+  document.querySelectorAll('.color-dot').forEach(dot=>{
+    dot.classList.toggle('active', dot.getAttribute('onclick').includes(s.color));
+  });
+}
+
+function setTarget(tgt){
+  activeTarget = tgt;
+  ['title','headings','body'].forEach(k=>{
+    document.getElementById('tgt-'+k).classList.toggle('active', k===tgt);
+  });
+  syncToolbarUI();
+}
+
+function updateStyle(prop, val){
+  styles[activeTarget][prop] = val;
+  renderWordPreview();
+}
+
+function toggleStyle(prop){
+  styles[activeTarget][prop] = !styles[activeTarget][prop];
+  renderWordPreview();
+}
+
+function toggleInsertImage(){
+  hasImage = !hasImage;
+  if(!hasImage) isSquareLayout = false;
+  renderWordPreview();
+}
+
+function toggleLayout(){
+  isSquareLayout = !isSquareLayout;
+  renderWordPreview();
+}
+
+function loadDocSample(name){
+  currentSample = name;
+  document.getElementById('doc-btn-kem').classList.toggle('btn-outline', name!=='kem');
+  document.getElementById('doc-btn-trip').classList.toggle('btn-outline', name!=='trip');
+  renderRequirementPanel();
+  resetDocSample();
+}
+
+function resetDocSample(){
+  styles = JSON.parse(JSON.stringify(defaultStyles));
+  hasImage = false;
+  isSquareLayout = false;
+  document.getElementById('sim-check-feedback').classList.add('hidden');
+  renderWordPreview();
+}
+
+function checkPracticeResult(){
+  const fb = document.getElementById('sim-check-feedback');
+  fb.classList.remove('hidden');
+  let logs = [];
+  let okCount = 0;
+
+  if(currentSample === 'kem'){
+    const tOk = styles.title.font.includes('Tahoma') && styles.title.size==='22px' && styles.title.bold && styles.title.color==='#0284c7';
+    logs.push(tOk ? '✅ <b>Tiêu đề chính:</b> Đạt chuẩn (Tahoma, cỡ 16, đậm, màu xanh Blue).' : '❌ <b>Tiêu đề chính:</b> Chưa đúng yêu cầu (cần phông Tahoma, cỡ 16, kiểu đậm B, màu xanh Blue).');
+    if(tOk) okCount++;
+
+    const hOk = styles.headings.font.includes('Verdana') && styles.headings.size==='16px' && styles.headings.bold && styles.headings.italic && styles.headings.color==='#7e22ce';
+    logs.push(hOk ? '✅ <b>Các đầu mục:</b> Đạt chuẩn (Verdana, cỡ 12, đậm, nghiêng, màu tím).' : '❌ <b>Các đầu mục:</b> Chưa đúng yêu cầu (cần phông Verdana, cỡ 12, đậm B + nghiêng I, màu tím).');
+    if(hOk) okCount++;
+
+    const bOk = styles.body.font.includes('Verdana') && styles.body.size==='16px';
+    logs.push(bOk ? '✅ <b>Nội dung văn bản:</b> Đạt chuẩn (Verdana, cỡ 12).' : '❌ <b>Nội dung văn bản:</b> Chưa đúng yêu cầu (cần phông Verdana, cỡ 12).');
+    if(bOk) okCount++;
+
+    const imgOk = hasImage && isSquareLayout;
+    logs.push(imgOk ? '✅ <b>Hình ảnh & Bố trí:</b> Đã chèn ảnh và chọn Layout Options → Square đặt bên phải chữ.' : '❌ <b>Hình ảnh & Bố trí:</b> Em cần nhấn <i>Chèn ảnh mẫu</i> và chọn <i>Layout Options → Square</i>.');
+    if(imgOk) okCount++;
+
+    const ratio = okCount / 4;
+    if(ratio > progressState.simKem) progressState.simKem = ratio;
+    updateDashboard();
+
+    fb.style.background = okCount===4 ? '#f0fdf4' : '#fffbeb';
+    fb.style.borderColor = okCount===4 ? '#86efac' : '#fde68a';
+    fb.innerHTML = `<div style="font-weight:800;margin-bottom:6px;color:${okCount===4?'#15803d':'#b45309'}">${okCount===4?'🎉 Xuất sắc! Em đạt trọn vẹn 15% tiến độ thực hành Kem cầu vồng hoa quả!':`🔎 Em đạt ${okCount}/4 tiêu chí (+${Math.round(ratio*15)}%/15% tiến độ):`}</div>` + logs.map(x=>`<div>${x}</div>`).join('');
+  } else {
+    const tOk = styles.title.font.includes('Arial') && styles.title.size==='20px' && styles.title.bold && styles.title.color==='#dc2626';
+    logs.push(tOk ? '✅ <b>Tiêu đề chính:</b> Đạt chuẩn (Arial, cỡ 15, đậm, màu đỏ).' : '❌ <b>Tiêu đề chính:</b> Chưa đúng yêu cầu (cần phông Arial, cỡ 15, kiểu đậm B, màu đỏ).');
+    if(tOk) okCount++;
+
+    const hOk = styles.headings.bold && styles.headings.italic && styles.headings.color==='#0284c7';
+    logs.push(hOk ? '✅ <b>Các mốc thời gian:</b> Đạt chuẩn (đậm, nghiêng, màu xanh Blue).' : '❌ <b>Các mốc thời gian:</b> Chưa đúng yêu cầu (cần kiểu đậm B + nghiêng I, màu xanh Blue).');
+    if(hOk) okCount++;
+
+    const imgOk = hasImage && isSquareLayout;
+    logs.push(imgOk ? '✅ <b>Hình ảnh & Bố trí:</b> Đã chèn ảnh minh hoạ và chọn Layout Options → Square.' : '❌ <b>Hình ảnh & Bố trí:</b> Em cần nhấn <i>Chèn ảnh mẫu</i> và chọn <i>Layout Options → Square</i>.');
+    if(imgOk) okCount++;
+
+    const ratio = okCount / 3;
+    if(ratio > progressState.simTrip) progressState.simTrip = ratio;
+    updateDashboard();
+
+    fb.style.background = okCount===3 ? '#f0fdf4' : '#fffbeb';
+    fb.style.borderColor = okCount===3 ? '#86efac' : '#fde68a';
+    fb.innerHTML = `<div style="font-weight:800;margin-bottom:6px;color:${okCount===3?'#15803d':'#b45309'}">${okCount===3?'🎉 Xuất sắc! Em đạt trọn vẹn 10% tiến độ thực hành Lịch trình tham quan!':`🔎 Em đạt ${okCount}/3 tiêu chí (+${Math.round(ratio*10)}%/10% tiến độ):`}</div>` + logs.map(x=>`<div>${x}</div>`).join('');
+  }
+}
+
+// ===================== 3. TRÒ CHƠI NGÔI SAO MAY MẮN =====================
+const STAR_QUESTIONS = [
+  {q:'Câu 1: Định dạng kí tự giúp làm gì?', opts:['Làm văn bản đẹp, dễ đọc và dễ ghi nhớ hơn.','Tự động dịch văn bản sang tiếng Anh.','Xoá bớt hình ảnh trong văn bản.'], ans:0, candy:3},
+  {q:'Câu 2: Để định dạng kí tự trên văn bản, trước tiên em cần làm gì?', opts:['Chọn (bôi đen) phần văn bản cần định dạng.','Nháy chuột vào nút Save để lưu tệp.','Đóng phần mềm soạn thảo văn bản.'], ans:0, candy:2},
+  {q:'Câu 3: Các lệnh định dạng kí tự nằm trong nhóm nào trên dải lệnh Home?', opts:['Nhóm Font','Nhóm Paragraph','Nhóm Clipboard'], ans:0, candy:5},
+  {q:'Câu 4: Ba kiểu chữ thường dùng để định dạng văn bản là gì?', opts:['In đậm, in nghiêng và gạch chân.','Chữ hoa, chữ thường và gạch ngang.','Phông chữ, cỡ chữ và màu chữ.'], ans:0, candy:8},
+  {q:'Câu 5: Để thay đổi cách bố trí hình ảnh trong văn bản, em cần nháy vào biểu tượng nào bên cạnh hình?', opts:['Layout Options','Font Color','Bullets'], ans:0, candy:10}
+];
+let totalCandies = 0;
+
+function openStar(idx){
+  const item = STAR_QUESTIONS[idx];
+  const st = document.getElementById('star-stage');
+  st.classList.remove('hidden');
+  st.innerHTML = `
+    <h3 style="margin-top:0;color:#b45309">⭐ ${item.q}</h3>
+    <div>
+      ${item.opts.map((o,i)=>`
+        <label class="option" style="background:#fff">
+          <input type="radio" name="star-radio" value="${i}"> ${'ABC'[i]}. ${o}
+        </label>
+      `).join('')}
+    </div>
+    <button class="btn btn-amber" style="margin-top:10px" onclick="checkStar(${idx})">🎁 Kiểm tra nhận kẹo & +5% tiến độ</button>
+    <div id="star-feedback" style="margin-top:10px;font-weight:700"></div>
+  `;
+}
+
+function checkStar(idx){
+  const sel = document.querySelector('input[name="star-radio"]:checked');
+  const fb = document.getElementById('star-feedback');
+  if(!sel){
+    fb.innerHTML = '<span style="color:#d97706">⚠️ Em hãy chọn một đáp án trước nhé!</span>';
+    return;
+  }
+  const item = STAR_QUESTIONS[idx];
+  if(Number(sel.value) === item.ans){
+    if(!progressState.stars[idx]){
+      progressState.stars[idx] = true;
+      totalCandies += item.candy;
+      document.getElementById('candy-count').textContent = totalCandies;
+      document.getElementById('star-done-count').textContent = progressState.stars.filter(Boolean).length;
+      document.getElementById('star-'+idx).classList.add('done');
+      updateDashboard();
+    }
+    fb.innerHTML = `<span style="color:#15803d">🎉 Chính xác! Em nhận được ${item.candy} viên kẹo và +5% tiến độ tương tác!</span>`;
+  } else {
+    fb.innerHTML = `<span style="color:#dc2626">❌ Chưa đúng rồi, em thử chọn lại đáp án khác nhé!</span>`;
+  }
+}
+
+// ===================== 4. NGÂN HÀNG 40 CÂU HỎI -> XUẤT NGẪU NHIÊN 10 CÂU =====================
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbzAKzG7QD3AaIkuzNXmIz_zCCdtE_V4dful3J_45I5v9Y0qPtDbVAoXKlqzeMwjEq5Drg/exec";
+
+const BANK_40 = [
+  // --- 14 CÂU NHẬN BIẾT (NB) ---
+  {type:'mcq', level:'NB', q:'Trong phần mềm soạn thảo văn bản Word, các nút lệnh định dạng kí tự (phông chữ, cỡ chữ, kiểu chữ, màu chữ) nằm ở nhóm lệnh nào trên dải lệnh Home?', options:['Font','Paragraph','Clipboard','Editing'], answer:0, explain:'Trên thẻ Home của Word, toàn bộ các lệnh định dạng kí tự (phông chữ, cỡ chữ, B, I, U, màu chữ) đều nằm trong nhóm lệnh Font.'},
+  {type:'mcq', level:'NB', q:'Định dạng kí tự trong văn bản mang lại tác dụng gì?', options:['Giúp trình bày văn bản đẹp hơn, làm nổi bật các tiêu đề, dễ đọc và dễ ghi nhớ','Tự động dịch văn bản sang tiếng nước ngoài','Thay đổi nội dung câu chuyện trong văn bản','Tự động gửi văn bản qua thư điện tử'], answer:0, explain:'Theo hộp Ghi nhớ SGK Tin học 5 trang 31, định dạng kí tự giúp trình bày văn bản đẹp hơn, dễ đọc và dễ ghi nhớ.'},
+  {type:'mcq', level:'NB', q:'Trong nhóm lệnh Font trên dải lệnh Home, các nút lệnh B, I, U lần lượt dùng để định dạng kiểu chữ nào?', options:['Đậm, nghiêng, gạch chân','Nghiêng, đậm, gạch chân','Gạch chân, đậm, nghiêng','Đậm, gạch chân, in hoa'], answer:0, explain:'B (Bold) là chữ đậm, I (Italic) là chữ nghiêng và U (Underline) là chữ gạch chân.'},
+  {type:'mcq', level:'NB', q:'Nút lệnh nào trong nhóm Font (trên thẻ Home) dùng để chọn màu chữ cho phần văn bản được chọn?', options:['Nút Font Color (biểu tượng chữ A có thanh màu bên dưới)','Nút Text Highlight Color (biểu tượng bút đánh dấu)','Nút Bold (chữ B)','Nút Italic (chữ I)'], answer:0, explain:'Biểu tượng chữ A có vạch màu bên dưới (Font Color) dùng để thay đổi màu sắc của chữ.'},
+  {type:'mcq', level:'NB', q:'Sau khi chọn hình ảnh trong Word, để thay đổi cách bố trí hình ảnh với văn bản, em nháy chuột vào biểu tượng nào xuất hiện bên cạnh hình ảnh?', options:['Layout Options','Font Color','Bullets','New Slide'], answer:0, explain:'Khi chọn hình ảnh, biểu tượng Layout Options xuất hiện ngay ở góc trên bên phải ảnh để chọn cách bố trí hình ảnh với văn bản.'},
+  {type:'mcq', level:'NB', q:'Trong bảng chọn Layout Options của Word, cách bố trí cơ bản đầu tiên (nằm ngang hàng với chữ) có tên gọi là gì?', options:['In Line with Text','Square','Tight','Behind Text'], answer:0, explain:'In Line with Text là chế độ mặc định đặt hình ảnh nằm trên cùng dòng với văn bản.'},
+  {type:'mcq', level:'NB', q:'Trong nhóm With Text Wrapping của Layout Options, kiểu bố trí nào giúp văn bản dàn xung quanh hình ảnh theo khung hình chữ nhật?', options:['Square','In Line with Text','Top and Bottom','Behind Text'], answer:0, explain:'Kiểu Square (hình vuông) giúp văn bản dàn đều xung quanh khung hình chữ nhật của hình ảnh.'},
+  {type:'mcq', level:'NB', q:'Nút lệnh nào dùng để định dạng kiểu chữ in nghiêng trong nhóm Font?', options:['Nút I','Nút B','Nút U','Nút A'], answer:0, explain:'Nút I (Italic) dùng để định dạng kiểu chữ in nghiêng.'},
+  {type:'mcq', level:'NB', q:'Nút lệnh nào dùng để định dạng kiểu chữ gạch chân trong nhóm Font?', options:['Nút U','Nút B','Nút I','Nút Aa'], answer:0, explain:'Nút U (Underline) dùng để tạo đường gạch chân dưới phần chữ được chọn.'},
+  {type:'mcq', level:'NB', q:'Ô hiển thị các tên như Calibri, Tahoma, Verdana, Arial trong nhóm Font dùng để chọn thuộc tính nào?', options:['Phông chữ','Cỡ chữ','Màu chữ','Kiểu bố trí ảnh'], answer:0, explain:'Ô danh sách thả xuống đầu tiên trong nhóm Font dùng để chọn phông chữ (như Calibri, Tahoma, Verdana, Arial...).'},
+  {type:'mcq', level:'NB', q:'Ô hiển thị các con số như 12, 14, 16 ngay bên cạnh ô phông chữ trong nhóm Font dùng để làm gì?', options:['Chọn cỡ chữ','Đánh số trang văn bản','Đếm số từ trong bài','Chỉnh số lượng hình ảnh'], answer:0, explain:'Ô số bên cạnh ô phông chữ dùng để chọn kích thước (cỡ chữ) lớn hay nhỏ cho kí tự.'},
+  {type:'tf', level:'NB', q:'Xác định Đúng hoặc Sai cho mỗi nhận định sau về định dạng kí tự và bố trí hình ảnh:', items:[
+    {text:'a) Định dạng kí tự gồm thay đổi phông chữ, cỡ chữ, kiểu chữ và màu chữ.', ans:true},
+    {text:'b) Thay đổi cách bố trí hình ảnh giúp văn bản được trình bày đẹp và hợp lí hơn.', ans:true},
+    {text:'c) Khi nháy chọn hình ảnh trong Word, nút Layout Options xuất hiện ở bên cạnh hình ảnh.', ans:true},
+    {text:'d) Nút lệnh I dùng để định dạng kiểu chữ đậm.', ans:false}
+  ], explain:'Ý a, b, c đúng theo nội dung Bài 6. Ý d sai vì nút I dùng để định dạng chữ nghiêng, còn nút B mới là chữ đậm.'},
+  {type:'match', level:'NB', q:'Nối mỗi nút lệnh/thành phần trong nhóm Font (cột A) với chức năng tương ứng (cột B):', left:[
+    '1. Ô chọn phông chữ (Tahoma, Verdana)',
+    '2. Ô chọn cỡ chữ (12, 16)',
+    '3. Các nút B, I, U',
+    '4. Nút màu chữ (chữ A có vạch màu)'
+  ], right:[
+    'a) Thay đổi kiểu phông chữ cho kí tự',
+    'b) Thay đổi kích thước lớn nhỏ của chữ',
+    'c) Chọn kiểu chữ đậm, nghiêng hoặc gạch chân',
+    'd) Thay đổi màu sắc của chữ'
+  ], pairs:[0,1,2,3], explain:'Mỗi công cụ trong nhóm Font đảm nhiệm một thuộc tính định dạng kí tự riêng: phông chữ, cỡ chữ, kiểu chữ (B/I/U) và màu chữ (A).'},
+  {type:'fill', level:'NB', q:'Điền từ thích hợp (kí tự, bố trí, Font, đẹp hơn) vào chỗ trống:', text:'Định dạng {0} (phông chữ, kiểu chữ, cỡ chữ, màu chữ) sử dụng các lệnh trong nhóm {1} của dải lệnh Home, giúp trình bày văn bản {2}, dễ đọc và dễ ghi nhớ. Thay đổi cách {3} hình ảnh giúp văn bản đẹp hơn.', blanks:['kí tự','Font','đẹp hơn','bố trí'], wordBank:['kí tự','Font','đẹp hơn','bố trí','xóa bỏ'], explain:'Đây là nội dung cốt lõi trong phần Ghi nhớ của Bài 6 SGK Tin học 5.'},
+
+  // --- 13 CÂU THÔNG HIỂU (TH) ---
+  {type:'mcq', level:'TH', q:'Trước khi thực hiện thao tác định dạng phông chữ, cỡ chữ hay màu chữ cho một đoạn văn bản hoặc tiêu đề, thao tác đầu tiên bắt buộc phải làm là gì?', options:['Chọn (bôi đen) phần văn bản cần định dạng','Nhấn phím Delete để xoá văn bản','Đóng phần mềm Word lại','In văn bản ra giấy trước'], answer:0, explain:'Bước 1 của quy trình định dạng kí tự luôn là chọn (bôi đen) phần văn bản cần định dạng để Word biết phạm vi áp dụng lệnh.'},
+  {type:'mcq', level:'TH', q:'Kiểu bố trí hình ảnh "Square" trong bảng chọn Layout Options có đặc điểm gì?', options:['Văn bản dàn xung quanh khung hình chữ nhật bao quanh hình ảnh, thuận tiện di chuyển ảnh đến vị trí hợp lí','Hình ảnh nằm đè lên che mất toàn bộ chữ','Hình ảnh bị ẩn đi không nhìn thấy trên trang giấy','Hình ảnh luôn nằm ở trang cuối cùng của văn bản'], answer:0, explain:'Kiểu Square giúp chữ dàn đều xung quanh ảnh và cho phép người dùng kéo thả ảnh tự do sang bên phải hoặc bên trái văn bản.'},
+  {type:'mcq', level:'TH', q:'Trong văn bản "Kem cầu vồng hoa quả" (Hình 28), bạn An góp ý: "Các tiêu đề nổi bật thì văn bản dễ đọc hơn". Để thực hiện góp ý này, em cần định dạng phần nào?', options:['Tiêu đề chính và các đầu mục (Nguyên liệu:, Dụng cụ:, Hướng dẫn:)','Chỉ định dạng dấu chấm câu ở cuối dòng','Xoá toàn bộ phần hướng dẫn làm kem','Đổi tên tệp văn bản'], answer:0, explain:'Làm nổi bật tiêu đề chính ("Kem cầu vồng hoa quả") và các đầu mục ("Nguyên liệu:", "Dụng cụ:", "Hướng dẫn:") giúp người đọc dễ phân biệt các phần nội dung.'},
+  {type:'mcq', level:'TH', q:'Trong văn bản "Kem cầu vồng hoa quả", bạn Minh góp ý: "Ảnh đặt bên phải chữ thì văn bản đẹp hơn". Sau khi chèn ảnh, em cần làm gì để đưa ảnh sang bên phải chữ?', options:['Chọn ảnh -> nháy Layout Options -> chọn kiểu dàn chữ (Square) -> kéo thả ảnh sang bên phải','Nhấn phím Space nhiều lần trước hình ảnh','Nhấn phím Enter liên tục để đẩy ảnh xuống dưới','Dùng công cụ phóng to màn hình'], answer:0, explain:'Để di chuyển ảnh đặt bên phải chữ gọn đẹp, ta chọn ảnh, mở Layout Options chọn kiểu Square rồi kéo thả ảnh sang vị trí bên phải.'},
+  {type:'mcq', level:'TH', q:'Trong hộp thoại Layout Options, phần "With Text Wrapping" khác với "In Line with Text" ở điểm nào?', options:['With Text Wrapping cho phép văn bản dàn xung quanh hình ảnh và dễ di chuyển ảnh tự do hơn','With Text Wrapping làm hình ảnh không thể di chuyển được','In Line with Text luôn đặt hình ảnh ở góc dưới bên phải','Hai mục này có chức năng hoàn toàn giống hệt nhau'], answer:0, explain:'In Line with Text giữ ảnh cố định như một kí tự trên dòng, còn With Text Wrapping (như Square) cho phép chữ bao quanh ảnh và kéo thả ảnh linh hoạt.'},
+  {type:'mcq', level:'TH', q:'Khi đang chọn một vùng văn bản đã được in đậm và nháy vào nút B một lần nữa, điều gì xảy ra?', options:['Bỏ định dạng kiểu chữ đậm cho phần văn bản đó','Tăng cỡ chữ lên gấp đôi','Đổi phông chữ sang Tahoma','Tô màu nền vàng cho toàn bộ trang'], answer:0, explain:'Các nút B, I, U hoạt động theo cơ chế bật/tắt: nháy lần 1 để bật định dạng, nháy lần 2 khi đang chọn văn bản sẽ tắt định dạng đó.'},
+  {type:'mcq', level:'TH', q:'Nếu muốn một đầu mục vừa nổi bật vừa mềm mại (như đầu mục "Nguyên liệu:" màu tím, đậm, nghiêng), em kết hợp các kiểu chữ nào?', options:['Nháy đồng thời cả nút B (đậm) và nút I (nghiêng)','Chỉ nháy nút U (gạch chân)','Không chọn kiểu chữ nào','Nhấn phím Esc'], answer:0, explain:'Có thể kết hợp nhiều kiểu chữ cùng lúc trên một vùng văn bản được chọn, ví dụ bật cả B (đậm) và I (nghiêng).'},
+  {type:'mcq', level:'TH', q:'Vì sao khi chèn ảnh vào Word mặc định (In Line with Text), ta thường khó kéo thả ảnh sang bên phải đoạn văn bản?', options:['Vì ảnh đang được coi như một kí tự nằm trên dòng văn bản nên chưa có chế độ dàn chữ xung quanh (như Square)','Vì hình ảnh bị khoá mật khẩu','Vì máy tính bị hỏng chuột','Vì ảnh không có màu sắc'], answer:0, explain:'Ở chế độ In Line with Text, ảnh nằm cùng dòng với chữ nên không thể tự do đặt song song bên phải khối văn bản cho tới khi chuyển sang With Text Wrapping (Square).'},
+  {type:'mcq', level:'TH', q:'Khi xem xét một văn bản được trình bày tốt (như văn bản Kem cầu vồng hoa quả sau khi chỉnh sửa), tiêu chí nào sau đây là phù hợp nhất?', options:['Tiêu đề rõ ràng nổi bật, không lỗi chính tả, hình ảnh minh hoạ hấp dẫn và bố trí hài hoà với chữ','Dùng càng nhiều màu sắc sặc sỡ trên mỗi chữ cái càng tốt','Mỗi dòng dùng một phông chữ khác nhau','Hình ảnh che lấp một nửa phần chữ'], answer:0, explain:'Dựa theo nhận xét của An và Minh (Hình 29, 30), văn bản đẹp cần tiêu đề nổi bật, sạch lỗi chính tả, phông chữ thống nhất và ảnh bố trí hợp lí bên chữ.'},
+  {type:'mcq', level:'TH', q:'Trong bảng chọn Layout Options (Hình 33), tuỳ chọn "Move with text" có ý nghĩa gì?', options:['Hình ảnh sẽ di chuyển theo đoạn văn bản khi em thêm hoặc bớt dòng ở phía trên','Hình ảnh bị xoá khỏi văn bản','Hình ảnh tự động đổi màu','Hình ảnh biến thành chữ viết'], answer:0, explain:'Move with text giúp hình ảnh gắn kết với đoạn văn bản xung quanh, tự động dịch chuyển theo khi nội dung phía trên thay đổi.'},
+  {type:'tf', level:'TH', q:'Xác định Đúng hoặc Sai về các thao tác định dạng kí tự và hình ảnh trong bài thực hành:', items:[
+    {text:'a) Muốn định dạng toàn bộ văn bản sang phông Verdana cỡ 12, em chọn toàn bộ văn bản rồi chọn phông và cỡ chữ.', ans:true},
+    {text:'b) Không thể kết hợp vừa chữ đậm vừa chữ nghiêng cho cùng một phần văn bản.', ans:false},
+    {text:'c) Khi chọn kiểu Square trong Layout Options, em có thể kéo thả để đặt ảnh bên phải văn bản.', ans:true},
+    {text:'d) Sau khi định dạng xong, em nên nháy nút Save để lưu lại các thay đổi.', ans:true}
+  ], explain:'Ý a, c, d đúng. Ý b sai vì hoàn toàn có thể bật đồng thời cả nút B (đậm) và nút I (nghiêng) cho cùng một phần văn bản.'},
+  {type:'match', level:'TH', q:'Ghép mỗi góp ý/tình huống trong bài (cột A) với thao tác giải quyết phù hợp (cột B):', left:[
+    '1. Tiêu đề chưa nổi bật so với nội dung',
+    '2. Đầu mục Nguyên liệu/Dụng cụ/Hướng dẫn',
+    '3. Hình ảnh nằm dưới chữ, muốn đặt bên phải',
+    '4. Muốn bỏ định dạng đậm đã chọn trước đó'
+  ], right:[
+    'a) Tăng cỡ chữ, chọn kiểu chữ đậm và màu chữ nổi bật',
+    'b) Định dạng kiểu chữ đậm, nghiêng và màu chữ riêng biệt',
+    'c) Nháy Layout Options chọn Square rồi kéo thả ảnh sang bên phải',
+    'd) Nháy lại nút lệnh B khi phần văn bản đang được chọn'
+  ], pairs:[0,1,2,3], explain:'Mỗi tình huống trình bày văn bản đều có thao tác tương ứng trong nhóm Font hoặc Layout Options.'},
+  {type:'fill', level:'TH', q:'Điền từ thích hợp (chọn, đậm, nghiêng, Square) vào chỗ trống:', text:'Muốn định dạng một cụm từ, trước tiên em phải {0} cụm từ đó. Trong bài thực hành Kem cầu vồng hoa quả, các đầu mục được định dạng kiểu chữ {1}, {2} và màu tím; còn hình ảnh được chọn kiểu {3} để đặt bên phải chữ.', blanks:['chọn','đậm','nghiêng','Square'], wordBank:['chọn','đậm','nghiêng','Square','Delete'], explain:'Quy trình chuẩn SGK Tin học 5 trang 31–32: chọn văn bản -> định dạng đầu mục đậm, nghiêng, màu tím -> chọn kiểu Square cho ảnh.'},
+
+  // --- 13 CÂU VẬN DỤNG (VD) ---
+  {type:'mcq', level:'VD', q:'Trong Nhiệm vụ 1 (Bài 6 SGK Tin học 5), tiêu đề "Kem cầu vồng hoa quả" cần phông chữ Tahoma, cỡ chữ 16, màu xanh Blue, kiểu đậm; nội dung cần phông Verdana, cỡ chữ 12. Cách làm nhanh và khoa học nhất là gì?', options:['Chọn toàn bộ văn bản đặt Verdana cỡ 12 trước, sau đó chọn riêng tiêu đề đổi thành Tahoma cỡ 16, đậm, màu xanh Blue','Gõ từng chữ một rồi đổi phông chữ liên tục sau mỗi từ','Xoá toàn bộ văn bản rồi gõ lại từ đầu','Chụp ảnh màn hình rồi dán vào Word'], answer:0, explain:'Định dạng chung cho toàn bộ văn bản trước rồi mới định dạng riêng cho tiêu đề và các đầu mục giúp tiết kiệm thời gian và tránh sót dòng.'},
+  {type:'mcq', level:'VD', q:'Trong bài Luyện tập trang 33 SGK, văn bản "Lịch trình chuyến đi tham quan" yêu cầu tiêu đề có phông Arial, cỡ 15, kiểu đậm, màu đỏ. Em cần thực hiện theo trình tự nào sau khi bôi đen tiêu đề?', options:['Chọn phông Arial -> chọn cỡ chữ 15 -> nháy nút B -> nháy nút Font Color chọn màu đỏ','Nháy nút I -> chọn cỡ chữ 10 -> chọn màu xanh','Nháy nút U -> chọn phông Times New Roman -> nhấn Delete','Mở Layout Options -> chọn Square'], answer:0, explain:'Bôi đen dòng tiêu đề "Lịch trình chuyến đi tham quan" rồi thiết lập đủ 4 thuộc tính: phông Arial, cỡ 15, kiểu đậm (B), màu đỏ.'},
+  {type:'mcq', level:'VD', q:'Để các mốc thời gian trong tệp "Chuyen Tham Quan" (như "Từ 7h30 – 8h00:", "Từ 8h00 – 9h00:") nổi bật rõ ràng theo yêu cầu SGK, em định dạng thế nào?', options:['Bôi đen từng mốc thời gian và chọn kiểu chữ đậm, nghiêng, màu xanh','Đổi màu chữ của toàn bộ lịch trình thành màu trắng trùng nền giấy','Xoá hết các mốc thời gian chỉ giữ lại giờ kết thúc','Đặt cỡ chữ thành 4'], answer:0, explain:'Theo đề bài Luyện tập trang 33, các mốc thời gian cần định dạng kiểu chữ đậm (B), nghiêng (I) và màu xanh.'},
+  {type:'mcq', level:'VD', q:'Khi di chuyển một bức ảnh đã đặt kiểu Square sang bên phải đoạn văn, em thấy ảnh hơi to làm đoạn văn bị thu hẹp quá nhiều. Em nên làm gì?', options:['Kéo thả nút tròn ở góc hình ảnh vào trong để thu nhỏ kích thước ảnh cho cân đối','Xoá luôn hình ảnh đi vì không thu nhỏ được','Tăng cỡ chữ của toàn bộ văn bản lên 36','Nhấn phím Delete để xoá đoạn văn bên cạnh'], answer:0, explain:'Kéo thả các nút tròn ở 4 góc khung ảnh giúp thu nhỏ hình ảnh đúng tỉ lệ, giữ bố cục cân đối với phần chữ bên trái.'},
+  {type:'mcq', level:'VD', q:'Sau khi định dạng văn bản "Lịch trình chuyến đi tham quan" và chèn ảnh minh hoạ xong, cách tự đánh giá nào giúp em hoàn thiện sản phẩm tốt nhất?', options:['Nêu hai điều làm tốt (ví dụ: tiêu đề nổi bật, ảnh phù hợp) và một mong muốn thay đổi để chỉnh sửa cho đẹp hơn','Cho rằng bài đã hoàn hảo tuyệt đối và không cần xem lại','Không nhận xét gì mà đóng tệp lại ngay','Chỉ chê bai mà không sửa'], answer:0, explain:'Phương pháp "Hai điều tích cực và một điều mong muốn thay đổi" được dùng xuyên suốt Bài 6 để rèn kĩ năng tự đánh giá và cải tiến sản phẩm số.'},
+  {type:'mcq', level:'VD', q:'Khi mở tệp "Cong ThucLamkem" để thực hành định dạng theo yêu cầu của Bài 6, sau khi chỉnh sửa xong em cần làm gì để giữ lại kết quả?', options:['Nháy chuột vào nút lệnh Save (biểu tượng đĩa mềm) để lưu tệp','Nháy chuột vào nút Undo liên tục','Nhấn tổ hợp phím Ctrl + A rồi nhấn Delete','Nháy dấu X đỏ đóng cửa sổ và chọn Don’t Save'], answer:0, explain:'Nháy nút lệnh Save giúp lưu toàn bộ phần định dạng kí tự và vị trí hình ảnh mới vào tệp.'},
+  {type:'mcq', level:'VD', q:'Nếu em vô tình định dạng nhầm cả đoạn văn thành chữ màu đỏ cỡ 28, cách khắc phục nhanh nhất là gì?', options:['Nháy nút Undo (hoặc chọn lại đoạn văn và chỉnh lại phông chữ, cỡ chữ, màu chữ chuẩn)','Xoá tệp đang mở và tạo tệp mới','Tắt nguồn máy tính bằng nút công tắc','Đổi tên tệp thành tên khác'], answer:0, explain:'Nút Undo hoàn tác ngay thao tác vừa làm nhầm, giúp khôi phục lại định dạng trước đó chỉ với một cú nháy chuột.'},
+  {type:'mcq', level:'VD', q:'Bạn Hoa muốn định dạng ba đầu mục "Nguyên liệu:", "Dụng cụ:", "Hướng dẫn:" đều có phông Verdana, cỡ 12, đậm, nghiêng, màu tím. Sau khi định dạng xong đầu mục "Nguyên liệu:", bạn nên làm gì tiếp theo?', options:['Lần lượt chọn đầu mục "Dụng cụ:" và "Hướng dẫn:" rồi áp dụng cùng phông Verdana, cỡ 12, đậm (B), nghiêng (I), màu tím','Định dạng "Dụng cụ:" màu vàng và "Hướng dẫn:" màu xám nhạt','Để nguyên hai đầu mục còn lại không định dạng','Xoá chữ "Dụng cụ:" và "Hướng dẫn:" đi'], answer:0, explain:'Các đầu mục ngang cấp trong cùng một văn bản cần được định dạng thống nhất (Verdana, cỡ 12, đậm, nghiêng, màu tím) như hướng dẫn Bước 4 trang 32.'},
+  {type:'mcq', level:'VD', q:'Khi đặt ảnh minh hoạ cốc kem ở bên phải văn bản bằng kiểu Square, vì sao văn bản trông gọn gàng và tiết kiệm trang giấy hơn so với kiểu In Line with Text?', options:['Vì phần chữ được dàn đều sang bên trái ngang hàng với ảnh thay vì để khoảng trống lớn bên cạnh ảnh','Vì phần chữ tự động biến mất khi có ảnh','Vì hình ảnh tự động thu nhỏ bằng kích thước một dấu chấm','Vì phông chữ tự đổi thành cỡ 6'], answer:0, explain:'Kiểu Square tận dụng khoảng trống chiều ngang, xếp chữ dàn bên trái và ảnh ở bên phải tạo bố cục hài hoà, cân đối.'},
+  {type:'tf', level:'VD', q:'Đánh giá Đúng hoặc Sai cho các tình huống thực hành định dạng kí tự và hình ảnh:', items:[
+    {text:'a) Trong bài thực hành Kem cầu vồng hoa quả, tiêu đề chính dùng phông Tahoma cỡ 16 đậm màu xanh, còn các đầu mục dùng phông Verdana cỡ 12 đậm nghiêng màu tím.', ans:true},
+    {text:'b) Trong Word, nút lệnh thay đổi màu chữ (A) và nút lệnh Layout Options đều giúp văn bản trình bày đẹp và rõ ràng hơn.', ans:true},
+    {text:'c) Để chọn kiểu chữ đậm, em nháy vào nút I; để chọn kiểu chữ nghiêng, em nháy vào nút B.', ans:false},
+    {text:'d) Sau khi chỉnh sửa văn bản theo mong muốn thay đổi của bản thân, lưu lại tệp giúp giữ được bản hoàn chỉnh nhất.', ans:true}
+  ], explain:'Ý a, b, d đúng theo hướng dẫn thực hành trang 31–33. Ý c sai vì B là đậm (Bold), I là nghiêng (Italic).'},
+  {type:'match', level:'VD', q:'Nối từng bước thực hành định dạng tiêu đề "Kem cầu vồng hoa quả" (cột A) với thao tác đúng (cột B):', left:[
+    '1. Chọn phần văn bản',
+    '2. Chọn phông & cỡ chữ',
+    '3. Chọn kiểu chữ đậm',
+    '4. Chọn màu chữ xanh Blue'
+  ], right:[
+    'a) Kéo chuột bôi đen dòng chữ "Kem cầu vồng hoa quả"',
+    'b) Chọn phông Tahoma và cỡ chữ 16 trong nhóm Font',
+    'c) Nháy chuột vào nút lệnh B',
+    'd) Nháy mũi tên bên cạnh nút A có vạch màu và chọn màu xanh Blue'
+  ], pairs:[0,1,2,3], explain:'Trình tự 4 bước chuẩn xác để định dạng tiêu đề chính theo Nhiệm vụ 1 trang 31–32 SGK.'},
+  {type:'fill', level:'VD', q:'Điền từ thích hợp (Tahoma, 16, Verdana, 12) vào chỗ trống theo mẫu thực hành Bài 6:', text:'Trong bài thực hành Kem cầu vồng hoa quả, toàn bộ văn bản dùng phông chữ {0} cỡ chữ {1}; riêng tiêu đề chính được đổi thành phông chữ {2} cỡ chữ {3}, kiểu chữ đậm, màu xanh.', blanks:['Verdana','12','Tahoma','16'], wordBank:['Verdana','12','Tahoma','16','Arial'], explain:'Theo Hình 34 SGK Tin học 5 trang 31: nội dung dùng Verdana cỡ 12, tiêu đề dùng Tahoma cỡ 16.'},
+  {type:'fill', level:'VD', q:'Điền từ thích hợp (Layout Options, Square, di chuyển, Save) vào chỗ trống:', text:'Sau khi chèn hình ảnh vào văn bản, em chọn ảnh và nháy nút {0} để chọn kiểu {1}. Tiếp theo, em kéo thả để {2} ảnh đến vị trí đẹp bên phải chữ rồi nhấn nút {3} để lưu tệp.', blanks:['Layout Options','Square','di chuyển','Save'], wordBank:['Layout Options','Square','di chuyển','Save','Print'], explain:'Đây là quy trình đầy đủ của Nhiệm vụ 2 (thay đổi vị trí hình ảnh) và lưu kết quả thực hành.'}
+];
+
+const shuffle = arr => {
+  const a = [...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+};
+const esc = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+const LEVEL_LABEL = {NB:'Nhận biết',TH:'Thông hiểu',VD:'Vận dụng'};
+const LEVEL_CLASS = {NB:'b-nb',TH:'b-th',VD:'b-vd'};
+const TYPE_LABEL  = {mcq:'Trắc nghiệm',tf:'Đúng / Sai',match:'Nối cột',fill:'Điền từ'};
+
+let chosenQuiz = [], quizRemain = 480, quizTimer = null, quizSubmitted = false;
+
+function startQuiz(){
+  const name = document.getElementById('stu-name').value.trim();
+  const cls  = document.getElementById('stu-class').value.trim();
+  if(!name || !cls){
+    alert('Em vui lòng nhập đầy đủ Họ và tên và Lớp ở phía trên trước khi làm bài trắc nghiệm nhé!');
+    document.getElementById('stu-name').focus();
+    return;
+  }
+
+  const picked = [
+    ...shuffle(BANK_40.filter(q=>q.level==='NB')).slice(0,4),
+    ...shuffle(BANK_40.filter(q=>q.level==='TH')).slice(0,3),
+    ...shuffle(BANK_40.filter(q=>q.level==='VD')).slice(0,3)
+  ];
+
+  chosenQuiz = shuffle(picked).map(q=>{
+    if(q.type==='mcq'){
+      const ops = shuffle(q.options.map((t,i)=>({t,correct:i===q.answer})));
+      return {...q,ops};
+    }
+    if(q.type==='match'){
+      const rightShuffled = shuffle(q.right.map((t,idx)=>({t,origIdx:idx})));
+      return {...q,rightShuffled};
+    }
+    if(q.type==='fill'){
+      return {...q,wordBankShuffled:shuffle(q.wordBank)};
+    }
+    return {...q};
+  });
+
+  quizSubmitted = false;
+  quizRemain = 480;
+  document.getElementById('stu-name').disabled = true;
+  document.getElementById('stu-class').disabled = true;
+  document.getElementById('btn-start-quiz').disabled = true;
+  document.getElementById('quiz-work').classList.remove('hidden');
+  document.getElementById('quiz-result').classList.add('hidden');
+
+  const qWrap = document.getElementById('quiz-questions');
+  qWrap.innerHTML = '';
+
+  chosenQuiz.forEach((q,i)=>{
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'qcard-'+i;
+
+    const head = `<div><b>Câu ${i+1}. ${esc(q.q)}</b> <span class="badge ${LEVEL_CLASS[q.level]}">${LEVEL_LABEL[q.level]}</span> <span class="badge b-type">${TYPE_LABEL[q.type]}</span></div>`;
+    let body = '';
+
+    if(q.type==='mcq'){
+      body = q.ops.map((o,j)=>`
+        <label class="option" id="qopt-${i}-${j}">
+          <input type="radio" name="qq${i}" value="${j}"> ${'ABCD'[j]}. ${esc(o.t)}
+        </label>
+      `).join('');
+    } else if(q.type==='tf'){
+      body = q.items.map((it,j)=>`
+        <div class="tf-row" id="qtf-${i}-${j}">
+          <span>${esc(it.text)}</span>
+          <span class="tf-choices">
+            <label><input type="radio" name="qq${i}_${j}" value="true"> Đúng</label>
+            <label><input type="radio" name="qq${i}_${j}" value="false"> Sai</label>
+          </span>
+        </div>
+      `).join('');
+    } else if(q.type==='match'){
+      const optsHtml = '<option value="">-- Chọn ý nối --</option>' + q.rightShuffled.map(r=>`<option value="${r.origIdx}">${esc(r.t)}</option>`).join('');
+      body = q.left.map((lText,j)=>`
+        <div class="match-row" id="qmatch-${i}-${j}">
+          <div><b>${esc(lText)}</b></div>
+          <div><select id="qsel-${i}-${j}">${optsHtml}</select></div>
+        </div>
+      `).join('');
+    } else if(q.type==='fill'){
+      const optsHtml = '<option value="">-- Chọn từ --</option>' + q.wordBankShuffled.map(w=>`<option value="${esc(w)}">${esc(w)}</option>`).join('');
+      let txt = esc(q.text);
+      q.blanks.forEach((_,bIdx)=>{
+        txt = txt.replace(`{${bIdx}}`, `<select id="qfill-${i}-${bIdx}">${optsHtml}</select>`);
+      });
+      body = `<div class="word-bank">💡 <b>Từ gợi ý:</b> ${q.wordBankShuffled.map(w=>esc(w)).join(' &nbsp;•&nbsp; ')}</div><div class="fill-box">${txt}</div>`;
+    }
+
+    card.innerHTML = head + body + `<div class="explain-box hidden" id="qexp-${i}"></div>`;
+    qWrap.appendChild(card);
+  });
+
+  clearInterval(quizTimer);
+  quizTimer = setInterval(()=>{
+    quizRemain--;
+    const mm = String(Math.floor(quizRemain/60)).padStart(2,'0');
+    const ss = String(quizRemain%60).padStart(2,'0');
+    document.getElementById('quiz-timer').textContent = `⏱️ ${mm}:${ss}`;
+    if(quizRemain <= 0) submitQuiz();
+  },1000);
+}
+
+async function submitQuiz(){
+  if(quizSubmitted) return;
+  quizSubmitted = true;
+  clearInterval(quizTimer);
+  document.getElementById('btn-submit-quiz').disabled = true;
+  document.querySelectorAll('#quiz-questions input, #quiz-questions select').forEach(el=>el.disabled=true);
+
+  const totalQ = chosenQuiz.length;
+  let totalRaw = 0;
+  let fullRight = 0;
+  let reviewHtml = '<hr style="border:0;border-top:1px solid #cbd5e1;margin:16px 0"><h3>📋 Bảng tổng hợp đáp án & Giảng giải chi tiết</h3>';
+
+  chosenQuiz.forEach((q,i)=>{
+    let ratio = 0;
+    let userAns = '';
+    let rightAns = '';
+
+    if(q.type==='mcq'){
+      const sel = document.querySelector(`input[name="qq${i}"]:checked`);
+      const cIdx = sel ? Number(sel.value) : -1;
+      const rIdx = q.ops.findIndex(o=>o.correct);
+      ratio = (cIdx === rIdx) ? 1 : 0;
+
+      const rLab = document.getElementById(`qopt-${i}-${rIdx}`);
+      if(rLab) rLab.classList.add('opt-correct');
+      if(ratio===0 && cIdx!==-1){
+        const wLab = document.getElementById(`qopt-${i}-${cIdx}`);
+        if(wLab) wLab.classList.add('opt-wrong');
+      }
+      rightAns = `${'ABCD'[rIdx]}. ${esc(q.ops[rIdx].t)}`;
+      userAns  = cIdx===-1 ? '<i>Chưa chọn</i>' : `${'ABCD'[cIdx]}. ${esc(q.ops[cIdx].t)}`;
+    } else if(q.type==='tf'){
+      let sub = 0, uArr = [], rArr = [];
+      q.items.forEach((it,j)=>{
+        const sel = document.querySelector(`input[name="qq${i}_${j}"]:checked`);
+        const val = sel ? sel.value : null;
+        const row = document.getElementById(`qtf-${i}-${j}`);
+        if(val === String(it.ans)){
+          sub++; row.classList.add('opt-correct');
+        } else {
+          row.classList.add('opt-wrong');
+        }
+        const tag = it.text.slice(0,2);
+        uArr.push(`${tag} ${val===null?'(trống)':(val==='true'?'Đúng':'Sai')}`);
+        rArr.push(`${tag} <b>${it.ans?'Đúng':'Sai'}</b>`);
+      });
+      ratio = sub / q.items.length;
+      userAns = uArr.join('; ');
+      rightAns = rArr.join('; ');
+    } else if(q.type==='match'){
+      let sub = 0, uArr = [], rArr = [];
+      q.left.forEach((lTxt,j)=>{
+        const sel = document.getElementById(`qsel-${i}-${j}`);
+        const val = sel.value;
+        const row = document.getElementById(`qmatch-${i}-${j}`);
+        if(val === String(q.pairs[j])){
+          sub++; row.classList.add('opt-correct');
+        } else {
+          row.classList.add('opt-wrong');
+        }
+        const chosenTxt = val==='' ? '(trống)' : q.right[Number(val)];
+        uArr.push(`${esc(lTxt)} → ${esc(chosenTxt)}`);
+        rArr.push(`${esc(lTxt)} → <b>${esc(q.right[q.pairs[j]])}</b>`);
+      });
+      ratio = sub / q.left.length;
+      userAns = uArr.join(' | ');
+      rightAns = rArr.join(' | ');
+    } else if(q.type==='fill'){
+      let sub = 0, uArr = [], rArr = [];
+      q.blanks.forEach((wAns,bIdx)=>{
+        const sel = document.getElementById(`qfill-${i}-${bIdx}`);
+        const val = sel.value;
+        if(val === wAns){
+          sub++; sel.style.background='#dcfce7'; sel.style.borderColor='#16a34a';
+        } else {
+          sel.style.background='#fee2e2'; sel.style.borderColor='#dc2626';
+        }
+        uArr.push(`(${bIdx+1}) ${val===''?'trống':esc(val)}`);
+        rArr.push(`(${bIdx+1}) <b>${esc(wAns)}</b>`);
+      });
+      ratio = sub / q.blanks.length;
+      userAns = uArr.join(', ');
+      rightAns = rArr.join(', ');
+    }
+
+    totalRaw += ratio;
+    const isOk = (ratio === 1);
+    if(isOk) fullRight++;
+
+    const card = document.getElementById(`qcard-${i}`);
+    card.classList.add(isOk ? 'q-correct' : 'q-wrong');
+
+    const exp = document.getElementById(`qexp-${i}`);
+    exp.classList.remove('hidden');
+    exp.classList.add(isOk ? 'ok' : 'bad');
+    exp.innerHTML = (isOk
+      ? `✅ <b>Chính xác hoàn toàn!</b> Đáp án đúng: ${rightAns}`
+      : `❌ <b>Chưa chính xác (${Math.round(ratio*100)}%).</b> Em chọn: ${userAns}<br>👉 <b>Đáp án đúng:</b> ${rightAns}`)
+      + `<div style="margin-top:6px;padding-top:6px;border-top:1px dashed rgba(0,0,0,.15)">💡 <b>Giảng giải:</b> ${esc(q.explain)}</div>`;
+
+    reviewHtml += `
+      <div class="review-item ${isOk?'ok':'bad'}">
+        <div><b>Câu ${i+1} (${LEVEL_LABEL[q.level]} – ${TYPE_LABEL[q.type]}):</b> ${esc(q.q)}</div>
+        <div style="margin-top:4px">${isOk ? '✅ Em làm đúng: '+rightAns : '❌ Em làm: '+userAns+'<br>👉 Đáp án đúng: '+rightAns}</div>
+        <div style="margin-top:4px;color:#334155">💡 <i>Giảng giải: ${esc(q.explain)}</i></div>
+      </div>
+    `;
+  });
+
+  // Cập nhật điểm trắc nghiệm và tổng điểm toàn bài
+  progressState.quizDone = true;
+  progressState.quizRatio = totalRaw / totalQ;
+  const summary = updateDashboard();
+
+  const quizScore10 = Number((progressState.quizRatio * 10).toFixed(2));
+  let rankText = 'Chưa hoàn thành (CHT)';
+  let rankClass = 'rank-cht';
+  if(summary.totalScore10 >= 8){
+    rankText = 'Hoàn thành tốt (HTT)';
+    rankClass = 'rank-htt';
+  } else if(summary.totalScore10 >= 5){
+    rankText = 'Hoàn thành (HT)';
+    rankClass = 'rank-ht';
+  }
+
+  const resBox = document.getElementById('quiz-result');
+  resBox.classList.remove('hidden');
+  resBox.innerHTML = `
+    <div style="background:#f8fafc;border:2px solid #bfdbfe;border-radius:14px;padding:18px">
+      <h2 style="margin:0 0 10px">🏆 Bảng tổng kết đánh giá toàn bài học của em</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-bottom:12px">
+        <div style="background:#eff6ff;padding:10px 12px;border-radius:10px;border:1px solid #bfdbfe">
+          <div style="font-size:13px;color:#1e40af;font-weight:700">Tiến độ tương tác toàn bài</div>
+          <div style="font-size:20px;font-weight:800;color:#1d4ed8">${summary.totalPct}%</div>
+        </div>
+        <div style="background:#fffbeb;padding:10px 12px;border-radius:10px;border:1px solid #fde68a">
+          <div style="font-size:13px;color:#92400e;font-weight:700">Điểm tương tác (Chặng 1–3)</div>
+          <div style="font-size:20px;font-weight:800;color:#b45309">${summary.interScore5.toFixed(2)} / 5.0</div>
+        </div>
+        <div style="background:#faf5ff;padding:10px 12px;border-radius:10px;border:1px solid #e9d5ff">
+          <div style="font-size:13px;color:#6b21a8;font-weight:700">Điểm trắc nghiệm (${fullRight}/${totalQ} câu)</div>
+          <div style="font-size:20px;font-weight:800;color:#7e22ce">${summary.quizScore5.toFixed(2)} / 5.0 <small style="font-size:13px">(${quizScore10}/10)</small></div>
+        </div>
+        <div style="background:#f0fdf4;padding:10px 12px;border-radius:10px;border:1px solid #bbf7d0">
+          <div style="font-size:13px;color:#166534;font-weight:700">TỔNG ĐIỂM TOÀN BÀI</div>
+          <div style="font-size:22px;font-weight:800;color:#15803d">${summary.totalScore10.toFixed(2)} / 10</div>
+        </div>
+      </div>
+      <p style="margin:6px 0">Mức đánh giá chung: <span class="rank-pill ${rankClass}">${rankText}</span></p>
+      <p id="send-status" style="margin:8px 0 12px;color:#0f766e;font-weight:700">⏳ Đang gửi điểm tương tác, điểm trắc nghiệm và % hoàn thành về Google Sheets của giáo viên...</p>
+      <button class="btn btn-outline btn-sm" onclick="resetQuiz()">🔄 Làm lượt trắc nghiệm mới (giữ nguyên % tương tác bài giảng)</button>
+    </div>
+    ${reviewHtml}
+  `;
+  resBox.scrollIntoView({behavior:'smooth'});
+
+  const payload = {
+    hoTen: document.getElementById('stu-name').value.trim(),
+    lop: document.getElementById('stu-class').value.trim(),
+    tracNghiem: summary.quizScore5,
+    tuLuan: summary.interScore5,
+    tongDiem: summary.totalScore10,
+    tienDoTuongTac: summary.totalPct + '%',
+    baiKiemTra: `Tin học 5 KNTT - Bài 6 (Tương tác ${summary.totalPct}%: ${summary.interScore5}đ + Trắc nghiệm: ${summary.quizScore5}đ)`,
+    monHoc: 'Tin học 5',
+    soCauDung: fullRight
+  };
+
+  try{
+    await fetch(ENDPOINT,{
+      method:'POST',
+      mode:'no-cors',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify(payload)
+    });
+    document.getElementById('send-status').textContent = '✅ Đã gửi đầy đủ điểm tương tác, điểm trắc nghiệm và % tiến độ về Google Sheets của giáo viên!';
+  } catch(e){
+    document.getElementById('send-status').textContent = '⚠️ Không gửi được điểm qua mạng. Em hãy kiểm tra Internet và báo giáo viên nhé.';
+  }
+}
+
+function resetQuiz(){
+  document.getElementById('stu-name').disabled = false;
+  document.getElementById('stu-class').disabled = false;
+  document.getElementById('btn-start-quiz').disabled = false;
+  document.getElementById('btn-submit-quiz').disabled = false;
+  document.getElementById('quiz-work').classList.add('hidden');
+  document.getElementById('quiz-result').classList.add('hidden');
+}
+
+// Khởi tạo giao diện ban đầu
+renderRequirementPanel();
+renderWordPreview();
+updateDashboard();
+</script>
+</body>
+</html>
